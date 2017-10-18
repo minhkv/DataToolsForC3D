@@ -9,14 +9,14 @@ from module_command import *
 
 c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
-	input_prefix=os.path.join(config.temp, "input.txt"), 
+	c3d_mode=C3D_Mode.FINE_TUNING,
 	pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000",
 	use_image=False)
 c3d.generate_prototxt()
 
 train_file = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
-	"Asset/trainlist02.txt",
+	"Asset/trainlist03.txt",
 	use_image=False)
 
 

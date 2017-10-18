@@ -2,31 +2,26 @@ from __future__ import print_function
 import os
 import sys
 import subprocess
+from C3D_Mode import *
 class C3D: 
     def __init__(
         self, 
         root_folder, 
-        input_prefix, 
-        output_prefix=None, 
-        solver_config=None, 
+        c3d_mode,        
         mean_file=None, 
         pre_trained=None, 
-        training=True,
+        solver_config=None,
         use_image=True):
         asset_path = os.path.abspath('Asset')
         self.out_prototxt = os.path.abspath("Asset/tmp")
 
         self.root_folder = root_folder
-        self.input_prefix = input_prefix
-        self.output_prefix = output_prefix
-        if training:
-            self.model_config = os.path.join(asset_path, 'c3d_ucf101_finetuning_train.prototxt')
-        else:
-            self.model_config = os.path.join(asset_path, 'c3d_ucf101_finetuning_test.prototxt')
-
+        self.input_prefix = os.path.join(self.out_prototxt, 'input.txt')
+        self.output_prefix = os.path.join(self.out_prototxt, 'output.txt')
         mean_file = os.path.join(self.out_prototxt, 'mean.binaryproto')
         if mean_file != None:
             self.mean_file = mean_file
+        self.model_config = os.path.join(asset_path, c3d_mode.value)
             
         self.pre_trained = os.path.join(asset_path, "pretrained")
         if self.pre_trained != None:
@@ -110,12 +105,10 @@ class C3D:
         
     def finetune(self):
         fine_tune_bin = os.path.join(self.root_folder, "build", "tools", "finetune_net.bin")
-        
-        solver = os.path.join(self.out_prototxt, "solver.prototxt")
         cmd = [
             "GLOG_logtostderr=1",
             fine_tune_bin,
-            solver,
+            self.solver_config,
             self.pre_trained
         ]
         print("[Info] Finetune: \n{}".format(' '.join(cmd)))
@@ -137,11 +130,10 @@ class C3D:
         gpu_id = 0
         test_net_bin = os.path.join(self.root_folder, "build/tools/test_net.bin")
         
-        model = os.path.join(self.out_prototxt, "model.prototxt")
         cmd = [
             "GLOG_logtostderr=1",
             test_net_bin,
-            model,
+            self.model_config,
             self.pre_trained,
             str(num_batch),
             "GPU",
