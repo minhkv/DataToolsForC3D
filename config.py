@@ -5,9 +5,18 @@ c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
 pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
 output_feature_folder = "/home/minhkv/feature"
+
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
-train_split_2_file_path = os.path.abspath("Asset/trainlist02.txt")
-test_split_2_file_path = os.path.abspath("Asset/testlist02.txt")
+test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
+classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
+
+train_split_2_file_path = os.path.join(asset_path, "trainlist02.txt")
+test_split_2_file_path = os.path.join(asset_path, "testlist02.txt")
+
+train_split_3_file_path = os.path.join(asset_path, "trainlist03.txt")
+test_split_3_file_path = os.path.join(asset_path, "testlist03.txt")
+
+classInd_file_path = os.path.join(asset_path, "classInd.txt")
 
 
 """
