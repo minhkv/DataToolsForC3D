@@ -18,6 +18,8 @@ class C3D:
         self.root_folder = root_folder
         self.input_prefix = os.path.join(self.out_prototxt, 'input.txt')
         self.output_prefix = os.path.join(self.out_prototxt, 'output.txt')
+        self.model_prototxt = os.path.join(self.out_prototxt, 'model.prototxt')
+        self.solver_prototxt = os.path.join(self.out_prototxt, 'solver.prototxt')
         mean_file = os.path.join(self.out_prototxt, 'mean.binaryproto')
         if mean_file != None:
             self.mean_file = mean_file
@@ -91,7 +93,7 @@ class C3D:
         cmd = [
             "GLOG_logtostderr=1",
             feature_extraction_bin,
-            self.model_config,
+            self.model_prototxt,
             self.pre_trained,
             str(gpu_id),
             batch_size,
@@ -108,7 +110,7 @@ class C3D:
         cmd = [
             "GLOG_logtostderr=1",
             fine_tune_bin,
-            self.solver_config,
+            self.solver_prototxt,
             self.pre_trained
         ]
         print("[Info] Finetune: \n{}".format(' '.join(cmd)))

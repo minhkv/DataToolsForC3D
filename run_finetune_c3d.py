@@ -35,14 +35,14 @@ train_file.preprocess_name(add_input_folder_prefix)
 train_file.preprocess_label(subtract_label)
 
 print("Counting frame")
-train_file.count_frame()
+# train_file.count_frame()
 
-createList = CreateListPrefix(
-	split_file=train_file,
-	output_feature_file=train_file, 
-	use_image=False
-	)
-createList.execute()
+# createList = CreateListPrefix(
+# 	split_file=train_file,
+# 	output_feature_file=train_file, 
+# 	use_image=False
+# 	)
+# createList.execute()
 
 # compute_volume_mean = ComputeVolumeMean(c3d)
 # compute_volume_mean.execute()
