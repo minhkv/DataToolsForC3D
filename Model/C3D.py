@@ -87,8 +87,26 @@ class C3D:
         print("Return code: {}".format(return_code))
         return return_code        
         
-    #def feature_extraction(self):
-        
+    def feature_extraction(self):
+        feature_extraction_bin = os.path.join(self.root_folder, "build", "tools", "extract_image_features.bin")
+        gpu_id = 0
+        batch_size = 30
+        num_batch_size = self.count_line(self.input_prefix) / batch_size
+        layers = ['fc8', 'fc7', 'fc6']
+        cmd = [
+            "GLOG_logtostderr=1",
+            feature_extraction_bin,
+            self.model_config,
+            self.pre_trained,
+            str(gpu_id),
+            batch_size,
+            num_batch_size,
+            self.output_prefix,
+            ' '.join(layers)
+        ]
+        print("[Info] Feature extraction: \n{}".format(' '.join(cmd)))
+        return_code = os.system(' '.join(cmd))
+        return return_code
         
     def finetune(self):
         fine_tune_bin = os.path.join(self.root_folder, "build", "tools", "finetune_net.bin")
@@ -100,7 +118,7 @@ class C3D:
             solver,
             self.pre_trained
         ]
-        print("[Info] Finetune: {}".format(' '.join(cmd)))
+        print("[Info] Finetune: \n{}".format(' '.join(cmd)))
         return_code = os.system(' '.join(cmd))
         return return_code
 
@@ -129,7 +147,7 @@ class C3D:
             "GPU",
             str(gpu_id)
         ]
-        print("[Info] Test net: {}".format(' '.join(cmd)))
+        print("[Info] Test net: \n{}".format(' '.join(cmd)))
         return_code = os.system(' '.join(cmd))
         return return_code
 
