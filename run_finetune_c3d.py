@@ -11,6 +11,7 @@ c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
 	c3d_mode=C3D_Mode.FINE_TUNING,
 	pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000",
+	mean_file=os.path.join(config.temp, "mean_split_3.binaryproto"),
 	use_image=False)
 c3d.generate_prototxt()
 
@@ -35,14 +36,14 @@ train_file.preprocess_name(add_input_folder_prefix)
 train_file.preprocess_label(subtract_label)
 
 print("Counting frame")
-# train_file.count_frame()
+train_file.count_frame()
 
-# createList = CreateListPrefix(
-# 	split_file=train_file,
-# 	output_feature_file=train_file, 
-# 	use_image=False
-# 	)
-# createList.execute()
+createList = CreateListPrefix(
+	split_file=train_file,
+	output_feature_file=train_file, 
+	use_image=False
+	)
+createList.execute()
 
 # compute_volume_mean = ComputeVolumeMean(c3d)
 # compute_volume_mean.execute()
