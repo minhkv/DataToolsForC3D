@@ -9,15 +9,15 @@ from module_command import *
 
 c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
-	input_prefix=os.path.join(config.temp, "input.txt"), 
-	pre_trained=os.path.join("c3d_ucf101_finetune_whole_iter_20000"),
-	training=False,
+	c3d_mode=C3D_Mode.TEST_FINE_TUNED_NET,
+	pre_trained=os.path.join(config.fine_tuned_net_folder, "Split_3", "c3d_ucf101_finetune_whole_iter_20000"),
+	mean_file=os.path.join(config.temp, "mean_split_3.binaryproto"),
 	use_image=False)
 c3d.generate_prototxt()
 
 test_file = UCFSplitFile(
 	r"(?P<label>.+)/(?P<name>.+)", 
-	os.path.join(config.asset_path, "sample_test.txt"),
+	os.path.join(config.asset_path, "testlist03.txt"),
 	use_image=False)
 test_file.load_name_and_label()
 print("Loaded: {} label".format(len(test_file.name)))
