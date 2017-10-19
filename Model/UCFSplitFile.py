@@ -27,7 +27,10 @@ class UCFSplitFile:
                 self.map_name_to_label = dict(zip(self.name, self.label))
         except IOError as ex:
             print("[Error] File Error: " + str(ex))
-    
+    def concatenate(self, split_file):
+        "Concatenate the name, label list of two UCFSplitFile"
+        self.name.extend(split_file.name)
+        self.label.extend(split_file.label)
     def count_frame(self):
         """This function only work after defined exactly filename"""
         if self.use_image:

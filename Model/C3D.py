@@ -91,15 +91,15 @@ class C3D:
         gpu_id = 0
         batch_size = 30
         num_batch_size = self.count_line(self.input_prefix) / batch_size
-        layers = ['fc8', 'fc7', 'fc6']
+        layers = ['prob', 'fc8-1', 'fc7-1', 'fc6-1']
         cmd = [
             "GLOG_logtostderr=1",
             feature_extraction_bin,
             self.model_prototxt,
             self.pre_trained,
             str(gpu_id),
-            batch_size,
-            num_batch_size,
+            str(batch_size),
+            str(num_batch_size),
             self.output_prefix,
             ' '.join(layers)
         ]
