@@ -59,7 +59,7 @@ class ConvertBinToCSV(Command):
             print("[Info] Processing: {}".format(os.path.basename(input_bin_folder)))
             feature_files = self.get_list_feature_in_folder(input_bin_folder, self.layer)
             for feature_path in feature_files:
-                feature_start_frame = os.path.splitext(os.path.basename(feature_path))[0]
+                feature_start_frame = os.path.basename(feature_path)
                 feature = self.get_features(feature_path, self.layer)
                 output_csv = os.path.join(output_feature_folder, "{}.csv".format(feature_start_frame))
                 self.save_bin_feature_to_csv(feature, output_csv)

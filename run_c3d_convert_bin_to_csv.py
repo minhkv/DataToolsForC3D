@@ -17,7 +17,7 @@ c3d.generate_prototxt()
 
 all_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
-	"Asset/sample_train.txt",
+	"Asset/trainlist03.txt",
 	use_image=False)
 all_ucf101.load_name_and_label()
 test_file = UCFSplitFile(
