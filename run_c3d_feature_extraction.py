@@ -11,7 +11,7 @@ from module_command import *
 c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
 	c3d_mode=C3D_Mode.FEATURE_EXTRACTION,
-	pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000",
+	pre_trained=os.path.join(config.output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000"),
 	use_image=False)
 c3d.generate_prototxt()
 
