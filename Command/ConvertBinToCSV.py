@@ -61,7 +61,7 @@ class ConvertBinToCSV(Command):
             for feature_path in feature_files:
                 feature_start_frame = os.path.splitext(os.path.basename(feature_path))[0]
                 feature = self.get_features(feature_path, self.layer)
-                output_csv = os.path.join(output_feature_folder, "{1}.csv".format(feature_start_frame)
+                output_csv = os.path.join(output_feature_folder, "{1}.csv".format(feature_start_frame))
                 print(output_csv)
                 self.save_bin_feature_to_csv(feature, output_csv))
         return
