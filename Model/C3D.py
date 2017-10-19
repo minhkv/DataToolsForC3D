@@ -3,14 +3,17 @@ import os
 import sys
 import subprocess
 from C3D_Mode import *
+from C3DChartType import *
 class C3D: 
     def __init__(
         self, 
         root_folder, 
-        c3d_mode,        
+        c3d_mode=C3D_Mode.TRAINING,        
         mean_file=None, 
         pre_trained=None, 
         solver_config=None,
+        chart_type=C3DChartType.TRAIN_LOSS_VS_ITERS,
+        log_files=[],
         use_image=True):
         asset_path = os.path.abspath('Asset')
         self.out_prototxt = os.path.abspath("Asset/tmp")
@@ -27,11 +30,11 @@ class C3D:
         self.pre_trained = os.path.join(asset_path, "pretrained")
         if self.pre_trained != None:
             self.pre_trained = pre_trained
-        
+        self.chart_type = chart_type.value
         self.solver_config = os.path.join(asset_path, "c3d_ucf101_finetuning_solver.prototxt")
         if solver_config != None:
             self.solver_config = solver_config
-        
+        self.log_files = log_files
         self.use_image = use_image
     
     def generate_config_file(self, in_file, out_file, arg_list): 
@@ -143,4 +146,17 @@ class C3D:
         print("[Info] Test net: \n{}".format(' '.join(cmd)))
         return_code = os.system(' '.join(cmd))
         return return_code
-
+    def draw_learning_curve(self):
+        draw_py = os.path.join(self.root_folder, "tools", "extra", "plot_training_log.py.example")
+        out_png = "learning_curve.png"
+        cmd = [
+            "python",
+            draw_py,
+            str(self.chart_type),
+            out_png,
+            ' '.join(self.log_files)
+        ]
+        print("[Info] Draw learning curve: \n{}".format(' '.join(cmd)))
+        return_code = os.system(' '.join(cmd))
+        
+        return return_code

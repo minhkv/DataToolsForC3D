@@ -7,3 +7,4 @@ from Finetune import *
 from GenerateConfigFile import *
 from Macro import *
 from TestNet import *
+from DrawLearningCurve import *

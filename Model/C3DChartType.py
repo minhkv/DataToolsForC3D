@@ -1,0 +1,11 @@
+from __future__ import print_function
+from enum import Enum
+class C3DChartType(Enum):
+    TEST_ACCURACY_VS_ITERS = 0
+    TEST_ACCURACY_VS_SECONDS = 1
+    TEST_LOSS_VS_ITERS = 2
+    TEST_LOSS_VS_SECONDS = 3
+    TRAIN_LEARNING_RATE_VS_ITERS = 4
+    TRAIN_LEARNING_RATE_VS_SECONDS = 5
+    TRAIN_LOSS_VS_ITERS = 6
+    TRAIN_LOSS_VS_SECONDS = 7
