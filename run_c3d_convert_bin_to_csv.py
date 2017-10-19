@@ -48,4 +48,7 @@ all_ucf101.preprocess_label(dummy_label)
 out_file.preprocess_name(add_out_folder_prefix)
 
 create_output_folder = CreateFeatureFolder(out_file)
-# create_output_folder.execute()
+create_output_folder.execute()
+
+convert_bin_feature_to_csv = ConvertBinToCSV(all_ucf101, out_file, "fc6-1")
+convert_bin_feature_to_csv.execute()
