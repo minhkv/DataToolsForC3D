@@ -137,7 +137,7 @@ class C3D:
         cmd = [
             "GLOG_logtostderr=1",
             test_net_bin,
-            self.model_config,
+            self.model_prototxt,
             self.pre_trained,
             str(num_batch),
             "GPU",
@@ -147,7 +147,7 @@ class C3D:
         return_code = os.system(' '.join(cmd))
         return return_code
     def draw_learning_curve(self):
-        draw_py = os.path.join(self.root_folder, "tools", "extra", "plot_training_log.py.example")
+        draw_py = os.path.join(self.root_folder, "tools", "extra", "plot_training_log.py")
         out_png = "learning_curve.png"
         cmd = [
             "python",

@@ -17,7 +17,7 @@ c3d.generate_prototxt()
 
 test_file = UCFSplitFile(
 	r"(?P<label>.+)/(?P<name>.+)", 
-	os.path.join(config.asset_path, "testlist03.txt"),
+	os.path.join(config.asset_path, "sample_test.txt"),
 	use_image=False)
 test_file.load_name_and_label()
 print("Loaded: {} label".format(len(test_file.name)))

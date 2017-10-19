@@ -8,7 +8,7 @@ from module_model import *
 from module_command import *
 
 log_files = [
-    "train_split_2.log"
+    "train_split_3.log"
 ]
 c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
