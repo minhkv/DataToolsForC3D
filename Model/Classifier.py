@@ -48,10 +48,14 @@ class Classifier:
     def load_feature_from_folder_and_average(self, split_file):
         split_input = []
         split_label = []
+        count_loss = 0
         try:
             for csv_folder, label in zip(split_file.name, split_file.label):
                 print("[Info] Loading feature from: {}".format(os.path.basename(csv_folder)))
                 list_feature = self.get_list_feature_in_folder(csv_folder, self.layer)
+                if len(list_feature) == 0:
+                    count_loss += 1
+                    continue
                 features = [self.read_csv(csv_file) for csv_file in list_feature]
                 features = np.mean(features, axis=0)
                 split_input.append(features)
@@ -64,6 +68,8 @@ class Classifier:
         print("[Info] Loading train test split {}".format(self.name))
         self.train_input, self.train_label = self.load_feature_from_folder_and_average(self.train_file)
         self.test_input, self.test_label = self.load_feature_from_folder_and_average(self.test_file)
+        print ("[Info] Loaded {} train feature".format(len(self.train_label)))
+        print ("[Info] Loaded {} test feature").format(len(self.test_label))
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)

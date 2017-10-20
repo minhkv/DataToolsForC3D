@@ -5,7 +5,7 @@ fine_tuned_net_folder = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
 pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
-output_feature_folder = "/home/minhkv/feature/sport1m"
+output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2"
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
