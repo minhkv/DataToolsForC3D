@@ -26,7 +26,7 @@ test_split_3_file_path = os.path.join(asset_path, "testlist03.txt")
 
 classInd_file_path = os.path.join(asset_path, "classInd.txt")
 
-
+layer = "fc6-1"
 """
 Parameters for model.prototxt:
 - Training, Finetuning: shuffle = True, mirror = True, use_temporal_jitter = False

@@ -3,6 +3,7 @@ from RemoteControl import *
 import sys
 import os
 import copy
+from sklearn.svm import SVC
 sys.path.extend(["Model", "Command"])
 import config
 from module_model import *
@@ -42,5 +43,22 @@ train_ucf101.preprocess_name(add_input_folder_prefix)
 train_ucf101.preprocess_label(subtract_label)
 test_file.preprocess_name(add_input_folder_prefix)
 test_file.preprocess_label(convert_and_subtract_label)
+def get_list_feature_in_folder(path, layer):
+    listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
+    return listfiles
+def get_all_feature_in_list_folders(list_folder, labels):
+    list_feature = []
+    list_label = []
+    for csv_folder, label in zip(list_folder, labels):
+        feature_in_folder = get_list_feature_in_folder(csv_folder, config.layer)
+        list_feature.extend(feature_in_folder)
+        list_label.extend([label] * len(feature_in_folder))
+    return list_feature, list_label
 
-classifier = Classifier()
+train_ucf101.name, train_ucf101.label = get_all_feature_in_list_folders(train_ucf101.name, train_ucf101.label)
+test_file.name, test_file.label = get_all_feature_in_list_folders(test_file.name, test_file.label)
+estimator = SVC(kernel="linear", C=0.025)
+classifier = Classifier(estimator, train_ucf101, test_file, classInd)
+
+classify = Classify(classifier)
+classify.execute()

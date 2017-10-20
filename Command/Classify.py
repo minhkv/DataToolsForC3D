@@ -7,4 +7,7 @@ class Classify(Command):
         self.classifier = classfier
     def execute(self):
         self.classifier.load_train_test_split()
+        self.classifier.training()
+        self.classifier.testing()
+        self.classifier.create_report()
         return
