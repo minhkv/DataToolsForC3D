@@ -19,10 +19,10 @@ train_split_1_file_path = os.path.join(asset_path, "trainlist01.txt")
 test_split_1_file_path = os.path.join(asset_path, "trainlist01.txt")
 
 train_split_2_file_path = os.path.join(asset_path, "trainlist02.txt")
-test_split_2_file_path = os.path.join(asset_path, "testlist02.txt")
+test_split_2_file_path = os.path.join(asset_path, "test_list02.txt")
 
 train_split_3_file_path = os.path.join(asset_path, "trainlist03.txt")
-test_split_3_file_path = os.path.join(asset_path, "testlist03.txt")
+test_split_3_file_path = os.path.join(asset_path, "test_list03.txt")
 
 classInd_file_path = os.path.join(asset_path, "classInd.txt")
 

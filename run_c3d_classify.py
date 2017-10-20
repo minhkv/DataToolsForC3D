@@ -11,14 +11,14 @@ from module_command import *
 
 train_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
-    config.sample_train_file_path,
-	# config.train_split_1_file_path,
+    # config.sample_train_file_path,
+	config.train_split_2_file_path,
 	use_image=False)
 
 test_file = UCFSplitFile(
 	r"(?P<label>\w+)/(?P<name>.+)", 
-    config.sample_test_file_path,
-	# config.test_split_1_file_path,
+    # config.sample_test_file_path,
+	config.test_split_2_file_path,
 	use_image=False)
 
 classInd = UCFSplitFile(
@@ -58,7 +58,7 @@ def get_all_feature_in_list_folders(list_folder, labels):
 train_ucf101.name, train_ucf101.label = get_all_feature_in_list_folders(train_ucf101.name, train_ucf101.label)
 test_file.name, test_file.label = get_all_feature_in_list_folders(test_file.name, test_file.label)
 estimator = SVC(kernel="linear", C=0.025)
-classifier = Classifier(estimator, train_ucf101, test_file, classInd)
+classifier = Classifier(estimator, train_ucf101, test_file, classInd, name="sport1m_split_2")
 
 classify = Classify(classifier)
 classify.execute()
