@@ -12,13 +12,13 @@ from module_command import *
 train_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
     # config.sample_train_file_path,
-	config.train_split_2_file_path,
+	config.train_split_1_file_path,
 	use_image=False)
 
 test_file = UCFSplitFile(
 	r"(?P<label>\w+)/(?P<name>.+)", 
     # config.sample_test_file_path,
-	config.test_split_2_file_path,
+	config.test_split_1_file_path,
 	use_image=False)
 
 classInd = UCFSplitFile(
@@ -43,22 +43,27 @@ train_ucf101.preprocess_name(add_input_folder_prefix)
 train_ucf101.preprocess_label(subtract_label)
 test_file.preprocess_name(add_input_folder_prefix)
 test_file.preprocess_label(convert_and_subtract_label)
-def get_list_feature_in_folder(path, layer):
-    listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
-    return listfiles
-def get_all_feature_in_list_folders(list_folder, labels):
-    list_feature = []
-    list_label = []
-    for csv_folder, label in zip(list_folder, labels):
-        feature_in_folder = get_list_feature_in_folder(csv_folder, config.layer)
-        list_feature.extend(feature_in_folder)
-        list_label.extend([label] * len(feature_in_folder))
-    return list_feature, list_label
 
-train_ucf101.name, train_ucf101.label = get_all_feature_in_list_folders(train_ucf101.name, train_ucf101.label)
-test_file.name, test_file.label = get_all_feature_in_list_folders(test_file.name, test_file.label)
+# def get_list_feature_in_folder(path, layer):
+#     listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
+#     return listfiles
+# def get_all_feature_in_list_folders(list_folder, labels):
+#     list_feature = []
+#     list_label = []
+#     for csv_folder, label in zip(list_folder, labels):
+#         print ("[Info] Get all feature in: {}".format(os.path.basename(csv_folder)))
+#         feature_in_folder = get_list_feature_in_folder(csv_folder, config.layer)
+#         list_feature.extend(feature_in_folder)
+#         list_label.extend([label] * len(feature_in_folder))
+#     print("get {} features".format(len(list_feature)))
+#     print("get {} labels".format(len(list_label)))
+#     return list_feature, list_label
+
+# train_ucf101.name, train_ucf101.label = get_all_feature_in_list_folders(train_ucf101.name, train_ucf101.label)
+# test_file.name, test_file.label = get_all_feature_in_list_folders(test_file.name, test_file.label)
+
 estimator = SVC(kernel="linear", C=0.025)
-classifier = Classifier(estimator, train_ucf101, test_file, classInd, name="sport1m_split_2")
+classifier = Classifier(estimator, train_ucf101, test_file, classInd, name="sport1m_split_1")
 
 classify = Classify(classifier)
 classify.execute()

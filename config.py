@@ -16,7 +16,7 @@ sample_train_file_path = os.path.join(asset_path, "sample_train.txt")
 sample_test_file_path = os.path.join(asset_path, "sample_test.txt")
 
 train_split_1_file_path = os.path.join(asset_path, "trainlist01.txt")
-test_split_1_file_path = os.path.join(asset_path, "trainlist01.txt")
+test_split_1_file_path = os.path.join(asset_path, "test_list01.txt")
 
 train_split_2_file_path = os.path.join(asset_path, "trainlist02.txt")
 test_split_2_file_path = os.path.join(asset_path, "test_list02.txt")

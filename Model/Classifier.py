@@ -1,6 +1,8 @@
 from __future__ import print_function
 import numpy as np
 import pandas as pd
+import glob
+import os
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, classification_report
 class Classifier:
     def __init__(self, classifier, train_file, test_file, class_ind, name=""):
@@ -18,6 +20,7 @@ class Classifier:
         self.recall = 0
         self.accuracy = 0
         self.confusion_matrix = []
+        self.layer = 'fc6-1'
 
     def read_csv(self, filename):
         try:
@@ -39,10 +42,28 @@ class Classifier:
             print("Error: {}".format(er))
             
         return split_input, split_label
+    def get_list_feature_in_folder(self, path, layer):
+        listfiles = glob.glob(os.path.join(path, "*" + layer + ".csv"))
+        return listfiles
+    def load_feature_from_folder_and_average(self, split_file):
+        split_input = []
+        split_label = []
+        try:
+            for csv_folder, label in zip(split_file.name, split_file.label):
+                print("[Info] Loading feature from: {}".format(os.path.basename(csv_folder)))
+                list_feature = self.get_list_feature_in_folder(csv_folder, self.layer)
+                features = [self.read_csv(csv_file) for csv_file in list_feature]
+                features = np.mean(features, axis=0)
+                split_input.append(features)
+                split_label.append(label)
+        except IOError as er:
+            print("[Error] Error: {}".format(er))
+            
+        return split_input, split_label
     def load_train_test_split(self):
         print("[Info] Loading train test split {}".format(self.name))
-        self.train_input, self.train_label = self.load_feature_from_csv(self.train_file)
-        self.test_input, self.test_label = self.load_feature_from_csv(self.test_file)
+        self.train_input, self.train_label = self.load_feature_from_folder_and_average(self.train_file)
+        self.test_input, self.test_label = self.load_feature_from_folder_and_average(self.test_file)
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
