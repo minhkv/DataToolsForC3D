@@ -60,6 +60,7 @@ class Classifier:
                 features = np.mean(features, axis=0)
                 split_input.append(features)
                 split_label.append(label)
+            print("Lost: {}".format(count_loss))
         except IOError as er:
             print("[Error] Error: {}".format(er))
             
