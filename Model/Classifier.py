@@ -69,7 +69,7 @@ class Classifier:
         self.train_input, self.train_label = self.load_feature_from_folder_and_average(self.train_file)
         self.test_input, self.test_label = self.load_feature_from_folder_and_average(self.test_file)
         print ("[Info] Loaded {} train feature".format(len(self.train_label)))
-        print ("[Info] Loaded {} test feature").format(len(self.test_label))
+        print ("[Info] Loaded {} test feature".format(len(self.test_label)))
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
@@ -79,11 +79,15 @@ class Classifier:
         self.precision = precision_score(self.test_label, self.test_pred, average='macro')
         self.recall = recall_score(self.test_label, self.test_pred, average='macro')
         self.accuracy = accuracy_score(self.test_label, self.test_pred)
-        labels = sorted(set(self.test_label))
+        # labels = sorted(set(self.test_label))
         self.confusion_matrix = confusion_matrix(y_true=self.test_label, y_pred=self.test_pred, labels=range(len(self.class_ind.label)))
     def create_report(self):
         print("[Info] Creating report for classifier")
-        report = classification_report(y_true=self.test_label, y_pred=self.test_pred, target_names=self.class_ind.name)
+        report = classification_report(
+            y_true=self.test_label, 
+            y_pred=self.test_pred, 
+            target_names=self.class_ind.name,
+            digits=5)
         with open('report{}.txt'.format(self.name), 'w') as fp:
             fp.write(report)
 
