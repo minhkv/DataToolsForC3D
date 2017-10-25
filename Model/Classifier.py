@@ -87,12 +87,23 @@ class Classifier:
             y_true=self.test_label, 
             y_pred=self.test_pred, 
             target_names=self.class_ind.name,
-            digits=5)
+            digits=7)
         with open('report{}.txt'.format(self.name), 'w') as fp:
             fp.write(report)
-
         np.savetxt(
-            "confusion_matrix{}.csv".format(self.name),
+            "y_true_{}.csv".format(self.name),
+            self.test_label,
+            fmt='%d',
+            delimiter=','
+            )
+        np.savetxt(
+            "y_pred_{}.csv".format(self.name),
+            self.test_pred,
+            fmt='%d',
+            delimiter=','
+            )
+        np.savetxt(
+            "confusion_matrix_{}.csv".format(self.name),
             self.confusion_matrix,
             fmt='%.16f',
             delimiter=','

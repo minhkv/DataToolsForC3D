@@ -1,13 +1,9 @@
 import os
+from sklearn.svm import SVC
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 fine_tuned_net_folder = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
-pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
-ucf101_video_folder="/home/minhkv/datasets/UCF101"
-output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2"
-output_fine_tuned_net = os.path.abspath("Finetuned_net")
-
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
 classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
@@ -26,7 +22,19 @@ test_split_3_file_path = os.path.join(asset_path, "test_list03.txt")
 
 classInd_file_path = os.path.join(asset_path, "classInd.txt")
 
+#  Change the following parameters for each split 
+ucf101_video_folder="/home/minhkv/datasets/UCF101"
+pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
 layer = "fc6-1"
+output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
+type_feature_file = "csv"
+output_fine_tuned_net = os.path.abspath("Finetuned_net")
+train_split_file_path = train_split_3_file_path
+test_split_file_path = test_split_3_file_path
+classifier_name = "ucf_finetune_split_3"
+clf = SVC(kernel="linear", C=0.025)
+
+
 """
 Parameters for model.prototxt:
 - Training, Finetuning: shuffle = True, mirror = True, use_temporal_jitter = False
