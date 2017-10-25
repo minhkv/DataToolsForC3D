@@ -29,6 +29,10 @@ layer = "fc6-1"
 output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
 type_feature_file = "csv"
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
+
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
+
 train_split_file_path = train_split_3_file_path
 test_split_file_path = test_split_3_file_path
 classifier_name = "ucf_finetune_split_3"

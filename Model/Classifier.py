@@ -13,6 +13,7 @@ class Classifier:
         self.name = name
         self.train_input = []
         self.train_label = []
+        self.test_name = []
         self.test_input = []
         self.test_label = []
         self.test_pred = []
@@ -20,6 +21,7 @@ class Classifier:
         self.recall = 0
         self.accuracy = 0
         self.confusion_matrix = []
+        self.empty_folder = []
         self.layer = 'fc6-1'
 
     def read_csv(self, filename):
@@ -48,14 +50,14 @@ class Classifier:
     def load_feature_from_folder_and_average(self, split_file):
         split_input = []
         split_label = []
-        count_loss = 0
         try:
             for csv_folder, label in zip(split_file.name, split_file.label):
                 print("[Info] Loading feature from: {}".format(os.path.basename(csv_folder)))
                 list_feature = self.get_list_feature_in_folder(csv_folder, self.layer)
                 if len(list_feature) == 0:
-                    count_loss += 1
+                    self.empty_folder.append(os.path.basename(csv_folder))
                     continue
+                self.test_name.append(csv_folder)
                 features = [self.read_csv(csv_file) for csv_file in list_feature]
                 features = np.mean(features, axis=0)
                 split_input.append(features)
@@ -79,7 +81,6 @@ class Classifier:
         self.precision = precision_score(self.test_label, self.test_pred, average='macro')
         self.recall = recall_score(self.test_label, self.test_pred, average='macro')
         self.accuracy = accuracy_score(self.test_label, self.test_pred)
-        # labels = sorted(set(self.test_label))
         self.confusion_matrix = confusion_matrix(y_true=self.test_label, y_pred=self.test_pred, labels=range(len(self.class_ind.label)))
     def create_report(self):
         print("[Info] Creating report for classifier")
@@ -90,6 +91,12 @@ class Classifier:
             digits=7)
         with open('report{}.txt'.format(self.name), 'w') as fp:
             fp.write(report)
+        np.savetxt(
+            "test_name_{}.csv".format(self.name),
+            self.test_name,
+            fmt='%s',
+            delimiter=','
+            )
         np.savetxt(
             "y_true_{}.csv".format(self.name),
             self.test_label,
@@ -105,7 +112,13 @@ class Classifier:
         np.savetxt(
             "confusion_matrix_{}.csv".format(self.name),
             self.confusion_matrix,
-            fmt='%.16f',
+            fmt='%d',
+            delimiter=','
+            )
+        np.savetxt(
+            "empty_folder_{}.csv".format(self.name),
+            self.empty_folder,
+            fmt='%s',
             delimiter=','
             )
 
