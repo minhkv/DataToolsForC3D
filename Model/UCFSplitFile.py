@@ -48,15 +48,3 @@ class UCFSplitFile:
         return self.map_name_to_label[name]
     def convert_label_to_name(self, label):
         return self.map_label_to_name[label]
-    
-# train_file = UCFSplitFile(r"(?P<label>.+)/(?P<name>.+)", "Asset/sample_test.txt")
-# train_file.load_name_and_label()
-# classInd = UCFSplitFile(r"(?P<label>.+) (?P<name>\w+)", "Asset/classInd.txt")
-# classInd.load_name_and_label()
-# def pre_label(label):
-#     return int(classInd.convert_name_to_label(label)) - 1
-# train_file.preprocess_label(pre_label)
-# print (train_file.name)
-# print (train_file.label)
-# train_file = UCFSplitFile(r"(?P<name>.+)", "../Asset/sample_test.txt")
-# train_file.load_name_and_label()

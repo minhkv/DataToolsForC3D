@@ -25,19 +25,18 @@ classInd_file_path = os.path.join(asset_path, "classInd.txt")
 #  Change the following parameters for each split 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
 pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
-layer = "fc6-1"
-output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
 type_feature_file = "csv"
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
-
-train_split_file_path = train_split_3_file_path
-test_split_file_path = test_split_3_file_path
-classifier_name = "ucf_finetune_split_3"
+layer = "fc6-1"
+output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2"
+train_split_file_path = train_split_2_file_path
+test_split_file_path = test_split_2_file_path
+classifier_name = "ucf_finetune_split_2"
 clf = SVC(kernel="linear", C=0.025)
 
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
 
 """
 Parameters for model.prototxt:
