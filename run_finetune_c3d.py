@@ -11,13 +11,13 @@ c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
 	c3d_mode=C3D_Mode.FINE_TUNING,
 	pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000",
-	mean_file=os.path.join(config.temp, "mean_split_3.binaryproto"),
+	mean_file=config.mean_file,
 	use_image=False)
 c3d.generate_prototxt()
 
 train_file = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
-	"Asset/trainlist03.txt",
+	config.train_split_file_path,
 	use_image=False)
 
 

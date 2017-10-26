@@ -2,7 +2,7 @@ import os
 from sklearn.svm import SVC
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
-fine_tuned_net_folder = os.path.abspath("Finetuned_net")
+output_fine_tuned_net = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
@@ -22,21 +22,29 @@ test_split_3_file_path = os.path.join(asset_path, "test_list03.txt")
 
 classInd_file_path = os.path.join(asset_path, "classInd.txt")
 
-#  Change the following parameters for each split 
-ucf101_video_folder="/home/minhkv/datasets/UCF101"
-pre_trained="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
-type_feature_file = "csv"
-output_fine_tuned_net = os.path.abspath("Finetuned_net")
 
-layer = "fc6-1"
-output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2"
-train_split_file_path = train_split_2_file_path
-test_split_file_path = test_split_2_file_path
-classifier_name = "ucf_finetune_split_2"
+ucf101_video_folder="/home/minhkv/datasets/UCF101"
+pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
+finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000")
+finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000")
+
+#  Change the following parameters for each split 
+type_feature_file = "bin"
+pretrained = finetuned_ucf101_split3
+layer = "fc8-1"
+mean_file = os.path.join(temp, "mean_split_3.binaryproto")
+output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
+train_split_file_path = train_split_3_file_path
+test_split_file_path = test_split_3_file_path
+
+classifier_name = "ucf_finetune_split_3"
 clf = SVC(kernel="linear", C=0.025)
 
+
+# For demo
 # train_split_file_path = sample_train_file_path
 # test_split_file_path = sample_test_file_path
+# output_feature_folder = "/home/minhkv/feature/test"
 
 """
 Parameters for model.prototxt:

@@ -10,21 +10,21 @@ from module_command import *
 c3d = C3D(
 	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
 	c3d_mode=C3D_Mode.TEST_FINE_TUNED_NET,
-	pre_trained=os.path.join(config.fine_tuned_net_folder, "Split_3", "c3d_ucf101_finetune_whole_iter_20000"),
-	mean_file=os.path.join(config.temp, "mean_split_3.binaryproto"),
+	pre_trained=os.path.join("c3d_ucf101_finetune_whole_iter_2000"),
+	mean_file=config.mean_file,
 	use_image=False)
 c3d.generate_prototxt()
 
 test_file = UCFSplitFile(
-	r"(?P<label>.+)/(?P<name>.+)", 
-	os.path.join(config.asset_path, "sample_test.txt"),
+	config.test_file_line_syntax, 
+	config.test_split_file_path,
 	use_image=False)
 test_file.load_name_and_label()
 print("Loaded: {} label".format(len(test_file.name)))
 
 classInd = UCFSplitFile(
-    r"(?P<label>.+) (?P<name>\w+)", 
-    os.path.join(config.asset_path, "classInd.txt"))
+    config.classInd_file_line_syntax, 
+    config.classInd_file_path)
 classInd.load_name_and_label()
 
 def add_input_folder_prefix(path):
@@ -33,9 +33,6 @@ def subtract_label(label):
 	return int(label) - 1
 def convert_and_subtract_label(label):
 	return int(classInd.convert_name_to_label(label)) - 1
-# def add_output_folder_prefix(path):
-# 	folder_name = os.path.splitext(os.path.basename(path))[0]
-# 	return os.path.join(config.output_folder, folder_name)
 
 test_file.preprocess_name(add_input_folder_prefix)
 test_file.preprocess_label(convert_and_subtract_label)
@@ -48,12 +45,6 @@ createList = CreateListPrefix(
 	use_image=False
 	)
 createList.execute()
-
-# compute_volume_mean = ComputeVolumeMean(c3d)
-# compute_volume_mean.execute()
-
-# finetune = Finetune(c3d)
-# finetune.execute()
 
 test_net = TestNet(c3d)
 code = test_net.execute()

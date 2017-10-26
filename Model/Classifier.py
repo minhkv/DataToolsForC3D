@@ -3,9 +3,19 @@ import numpy as np
 import pandas as pd
 import glob
 import os
+import sys
+import array
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, classification_report
 class Classifier:
-    def __init__(self, classifier, train_file, test_file, class_ind, name=""):
+    def __init__(
+        self, 
+        classifier, 
+        train_file, 
+        test_file, 
+        class_ind, 
+        name="", 
+        layer="fc6-1",
+        type_feature_file="csv"):
         self.classifier = classifier
         self.train_file = train_file
         self.test_file = test_file
@@ -22,43 +32,45 @@ class Classifier:
         self.accuracy = 0
         self.confusion_matrix = []
         self.empty_folder = []
-        self.layer = 'fc6-1'
+        self.layer = layer
+        self.type_feature_file = type_feature_file
 
+    def read_bin(self, filename):
+        with open(filename, 'rb') as f:
+            s = f.read()
+            (n, c, l, h, w) = array.array("i", s[:20])
+            feature_vec = np.array(array.array("f", s[20:]))
+            return feature_vec
     def read_csv(self, filename):
-        try:
-            with open(filename, 'rb') as csvfile:
-                feature=np.array([float(w) for w in csvfile.read().split(',')])
+        with open(filename, 'rb') as csvfile:
+            feature=np.array([float(w) for w in csvfile.read().split(',')])
             return feature
-        except IOError as er:
-            print("[Error] IOError: {}".format(str(er)))
-        
-    def load_feature_from_csv(self, split_file):
-        split_input = []
-        split_label = []
-        try:
-            for csv_file, label in zip(split_file.name, split_file.label):
-                feature = self.read_csv(csv_file)
-                split_input.append(feature)
-                split_label.append(label)
-        except IOError as er:
-            print("Error: {}".format(er))
-            
-        return split_input, split_label
+    def read_feature_file(self, filename):
+        if(self.type_feature_file == "bin"):
+            feature = self.read_bin(filename)
+        elif (self.type_feature_file == "csv"):
+            feature = self.read_csv(filename)
+        else: 
+            print("[Error] Not have feature filetype: {}".format(self.type_feature_file))
+            sys.exit(-6)
+        return feature
+
     def get_list_feature_in_folder(self, path, layer):
-        listfiles = glob.glob(os.path.join(path, "*" + layer + ".csv"))
+        listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         return listfiles
+
     def load_feature_from_folder_and_average(self, split_file):
         split_input = []
         split_label = []
         try:
-            for csv_folder, label in zip(split_file.name, split_file.label):
-                print("[Info] Loading feature from: {}".format(os.path.basename(csv_folder)))
-                list_feature = self.get_list_feature_in_folder(csv_folder, self.layer)
+            for feature_folder, label in zip(split_file.name, split_file.label):
+                print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
+                list_feature = self.get_list_feature_in_folder(feature_folder, self.layer)
                 if len(list_feature) == 0:
-                    self.empty_folder.append(os.path.basename(csv_folder))
+                    self.empty_folder.append(os.path.basename(feature_folder))
                     continue
-                self.test_name.append(csv_folder)
-                features = [self.read_csv(csv_file) for csv_file in list_feature]
+                self.test_name.append(feature_folder)
+                features = [self.read_feature_file(csv_file) for csv_file in list_feature]
                 features = np.mean(features, axis=0)
                 split_input.append(features)
                 split_label.append(label)
@@ -78,10 +90,14 @@ class Classifier:
     def testing(self):
         print("[Info] Testing classifier {}".format(self.name))
         self.test_pred = self.classifier.predict(self.test_input)
-        self.precision = precision_score(self.test_label, self.test_pred, average='macro')
-        self.recall = recall_score(self.test_label, self.test_pred, average='macro')
-        self.accuracy = accuracy_score(self.test_label, self.test_pred)
-        self.confusion_matrix = confusion_matrix(y_true=self.test_label, y_pred=self.test_pred, labels=range(len(self.class_ind.label)))
+        # self.precision = precision_score(self.test_label, self.test_pred, average='macro')
+        # self.recall = recall_score(self.test_label, self.test_pred, average='macro')
+        # self.accuracy = accuracy_score(self.test_label, self.test_pred)
+        self.confusion_matrix = confusion_matrix(
+            y_true=self.test_label,
+            y_pred=self.test_pred, 
+            labels=range(len(self.class_ind.label))
+            )
     def create_report(self):
         print("[Info] Creating report for classifier")
         report = classification_report(
@@ -112,7 +128,7 @@ class Classifier:
         np.savetxt(
             "confusion_matrix_{}.csv".format(self.name),
             self.confusion_matrix,
-            fmt='%d',
+            fmt='%5d',
             delimiter=','
             )
         np.savetxt(
