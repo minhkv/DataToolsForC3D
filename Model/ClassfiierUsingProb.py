@@ -8,3 +8,8 @@ class ClassifierUsingProb(Classifier):
         return np.argmax(x_test)
     def testing(self): 
         self.test_pred = [self.predict(x_test) for x_test in self.test_input]
+        self.confusion_matrix = confusion_matrix(
+            y_true=self.test_label,
+            y_pred=self.test_pred, 
+            labels=range(len(self.class_ind.label))
+            )
