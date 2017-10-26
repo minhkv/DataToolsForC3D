@@ -9,10 +9,10 @@ from sklearn.metrics import precision_score, recall_score, accuracy_score, confu
 class Classifier:
     def __init__(
         self, 
-        classifier, 
         train_file, 
         test_file, 
         class_ind, 
+        classifier=None, 
         name="", 
         layer="fc6-1",
         type_feature_file="csv"):

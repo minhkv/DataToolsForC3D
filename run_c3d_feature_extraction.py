@@ -51,10 +51,9 @@ createList = CreateListPrefix(
 	output_feature_file=out_file, 
 	use_image=False
 	)
-# createList.execute()
-
 create_output_folder = CreateFeatureFolder(out_file)
-# create_output_folder.execute()
-
 feature_extraction = FeatureExtraction(c3d)
-# feature_extraction.execute()
+
+createList.execute()
+create_output_folder.execute()
+feature_extraction.execute()

@@ -31,7 +31,7 @@ finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_uc
 #  Change the following parameters for each split 
 type_feature_file = "bin"
 pretrained = finetuned_ucf101_split3
-layer = "fc8-1"
+layer = "prob"
 mean_file = os.path.join(temp, "mean_split_3.binaryproto")
 output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
 train_split_file_path = train_split_3_file_path
@@ -42,9 +42,10 @@ clf = SVC(kernel="linear", C=0.025)
 
 
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
-# output_feature_folder = "/home/minhkv/feature/test"
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
+output_feature_folder = "/home/minhkv/feature/test"
+classifier_name = "classifier_test"
 
 """
 Parameters for model.prototxt:

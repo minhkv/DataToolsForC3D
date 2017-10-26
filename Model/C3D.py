@@ -91,7 +91,7 @@ class C3D:
         gpu_id = 0
         batch_size = 30
         num_batch_size = self.count_line(self.input_prefix) / batch_size
-        layers = ['prob', 'fc8-1', 'fc7-1', 'fc6-1']
+        layers = ['prob', 'fc8', 'fc7', 'fc6']
         cmd = [
             "GLOG_logtostderr=1",
             feature_extraction_bin,
