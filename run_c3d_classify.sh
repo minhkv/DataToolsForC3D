@@ -1,6 +1,6 @@
 STARTTIME=$(date +%s)
 now=$(date)
-name="classifier_ucf_finetune_2_fc6"
+name="classifier_ucf_finetune_2_fc7"
 mkdir -p report_$name
 echo "$now start classification" >> time_classify_$name.txt
 echo "$now start classification" >> log_classify_$name.txt

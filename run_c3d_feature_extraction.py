@@ -11,7 +11,8 @@ from module_command import *
 c3d = C3D(
 	root_folder=config.c3d_root, 
 	c3d_mode=C3D_Mode.FEATURE_EXTRACTION_UCF101,
-	pre_trained=config.finetuned_ucf101_split2,
+	pre_trained=config.pretrained,
+	mean_file=config.mean_file,
 	use_image=False)
 c3d.generate_prototxt()
 
@@ -33,7 +34,7 @@ def add_input_folder_prefix(path):
 	return os.path.join(config.ucf101_video_folder, os.path.basename(path))
 def add_out_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
-	return os.path.join(config.output_feature_folder, "bin", os.path.basename(video_name))
+	return os.path.join(config.output_feature_folder, config.type_feature_file, os.path.basename(video_name))
 def subtract_label(label):
 	return int(label) - 1
 def dummy_label(label):

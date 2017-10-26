@@ -30,7 +30,7 @@ finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_uc
 
 #  Change the following parameters for each split 
 type_feature_file = "bin" # for classify
-pretrained = finetuned_ucf101_split2 # for feature extraction, finetuning
+pretrained = finetuned_ucf101_split3 # for feature extraction, finetuning
 layer = "fc6" # for converting and classify
 mean_file = os.path.join(temp, "mean_split_2.binaryproto")
 output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2" # for feature extraction, classify
