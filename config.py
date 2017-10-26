@@ -29,23 +29,23 @@ finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_uc
 finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000")
 
 #  Change the following parameters for each split 
-type_feature_file = "bin"
-pretrained = finetuned_ucf101_split3
-layer = "prob"
-mean_file = os.path.join(temp, "mean_split_3.binaryproto")
-output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_3"
-train_split_file_path = train_split_3_file_path
-test_split_file_path = test_split_3_file_path
+type_feature_file = "bin" # for classify
+pretrained = finetuned_ucf101_split2 # for feature extraction, finetuning
+layer = "fc6" # for converting and classify
+mean_file = os.path.join(temp, "mean_split_2.binaryproto")
+output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2" # for feature extraction, classify
+train_split_file_path = train_split_2_file_path # finetune, feature extract, classify
+test_split_file_path = test_split_2_file_path # finetune, feature extract, classify
 
-classifier_name = "ucf_finetune_split_3"
-clf = SVC(kernel="linear", C=0.025)
+classifier_name = "classifier_ucf_finetune_2_fc6" # classify
+clf = SVC(kernel="linear", C=0.025) # classify
 
 
 # For demo
-train_split_file_path = sample_train_file_path
-test_split_file_path = sample_test_file_path
-output_feature_folder = "/home/minhkv/feature/test"
-classifier_name = "classifier_test"
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
+# output_feature_folder = "/home/minhkv/feature/test"
+# classifier_name = "classifier_test"
 
 """
 Parameters for model.prototxt:
