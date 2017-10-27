@@ -21,23 +21,29 @@ train_split_3_file_path = os.path.join(asset_path, "trainlist03.txt")
 test_split_3_file_path = os.path.join(asset_path, "test_list03.txt")
 
 classInd_file_path = os.path.join(asset_path, "classInd.txt")
+mean_file_ucf_split_2 = os.path.join(temp, "mean_split_2.binaryproto")
+mean_file_ucf_split_3 = os.path.join(temp, "mean_split_3.binaryproto")
+mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
 pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
 finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000")
+feature_folder_ucf_split_2 = "/home/minhkv/feature/finetuned_ucf101_split_2"
+feature_folder_ucf_split_3 = "/home/minhkv/feature/finetuned_ucf101_split_3"
+feature_folder_sport1m = "/home/minhkv/feature/sport1m"
 
 #  Change the following parameters for each split 
 type_feature_file = "bin" # for classify
-pretrained = finetuned_ucf101_split3 # for feature extraction, finetuning
-layer = "fc6" # for converting and classify
-mean_file = os.path.join(temp, "mean_split_2.binaryproto")
-output_feature_folder = "/home/minhkv/feature/finetuned_ucf101_split_2" # for feature extraction, classify
+pretrained = finetuned_ucf101_split2 # for feature extraction, finetuning
+layer = "fc8" # for converting and classify
+mean_file = mean_file_ucf_split_2
+output_feature_folder = feature_folder_ucf_split_2 # for feature extraction, classify
 train_split_file_path = train_split_2_file_path # finetune, feature extract, classify
 test_split_file_path = test_split_2_file_path # finetune, feature extract, classify
 
-classifier_name = "classifier_ucf_finetune_2_fc6" # classify
+classifier_name = "classifier_ucf_2_fc8" # classify
 clf = SVC(kernel="linear", C=0.025) # classify
 
 
