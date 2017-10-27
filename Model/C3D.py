@@ -90,7 +90,7 @@ class C3D:
         feature_extraction_bin = os.path.join(self.root_folder, "build", "tools", "extract_image_features.bin")
         gpu_id = 0
         batch_size = 30
-        num_batch_size = self.count_line(self.input_prefix) / batch_size
+        num_batch_size = self.count_line(self.input_prefix) / batch_size + 1
         layers = ['prob', 'fc8', 'fc7', 'fc6']
         cmd = [
             "GLOG_logtostderr=1",
