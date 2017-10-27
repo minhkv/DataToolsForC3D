@@ -8,9 +8,9 @@ from module_model import *
 from module_command import *
 
 c3d = C3D(
-	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
+	root_folder=config.c3d_root, 
 	c3d_mode=C3D_Mode.TEST_FINE_TUNED_NET,
-	pre_trained=os.path.join("c3d_ucf101_finetune_whole_iter_2000"),
+	pre_trained=config.pretrained,
 	mean_file=config.mean_file,
 	use_image=False)
 c3d.generate_prototxt()
@@ -47,5 +47,4 @@ createList = CreateListPrefix(
 createList.execute()
 
 test_net = TestNet(c3d)
-code = test_net.execute()
-print(code)
+test_net.execute()
