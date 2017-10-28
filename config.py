@@ -60,8 +60,8 @@ clf = SVC(kernel="linear", C=0.025) # classify
 # test_split_file_path = lost_test_file_path
 
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 

@@ -1,9 +1,9 @@
 STARTTIME=$(date +%s)
 now=$(date)
-# name="feature_extraction_lost_ucf_3"
-# name="convert_lost_ucf_3_fc6"
-name="classify_ucf_3_fc6"
-# name="classify_ucf_3_prob"
+# name="feature_extraction_lost_ucf_1"
+# name="convert_ucf_1_fc6"
+name="demo_classify_ucf_1_fc6_bin"
+# name="classify_ucf_1_prob"
 
 # run_file=run_c3d_feature_extraction.py
 # run_file=run_c3d_convert_bin_to_csv.py

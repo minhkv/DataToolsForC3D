@@ -39,7 +39,8 @@ class Classifier:
         with open(filename, 'rb') as f:
             s = f.read()
             (n, c, l, h, w) = array.array("i", s[:20])
-            feature_vec = np.array(array.array("f", s[20:]))
+            feature = array.array("f", s[20:])
+            feature_vec = np.array(array.array("f", [float("{:16f}".format(i)) for i in feature]))
             return feature_vec
     def read_csv(self, filename):
         with open(filename, 'rb') as csvfile:
