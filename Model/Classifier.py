@@ -58,7 +58,6 @@ class Classifier:
     def get_list_feature_in_folder(self, path, layer):
         listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         return listfiles
-
     def load_feature_from_folder_and_average(self, split_file):
         split_input = []
         split_label = []
@@ -67,7 +66,9 @@ class Classifier:
                 print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
                 list_feature = self.get_list_feature_in_folder(feature_folder, self.layer)
                 if len(list_feature) == 0:
-                    self.empty_folder.append(os.path.basename(feature_folder))
+                    class_name = self.class_ind.convert_label_to_name(str(label + 1))
+                    input_name = os.path.basename(feature_folder) + ".avi"
+                    self.empty_folder.append(os.path.join(class_name, input_name))
                     continue
                 self.test_name.append(feature_folder)
                 features = [self.read_feature_file(csv_file) for csv_file in list_feature]

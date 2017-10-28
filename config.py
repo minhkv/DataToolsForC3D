@@ -33,20 +33,22 @@ mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
 pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
+finetuned_ucf101_split1 = os.path.join(output_fine_tuned_net, "Split_1", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000")
+feature_folder_ucf_split_1 = "/home/minhkv/feature/finetuned_ucf101_split_1"
 feature_folder_ucf_split_2 = "/home/minhkv/feature/finetuned_ucf101_split_2"
 feature_folder_ucf_split_3 = "/home/minhkv/feature/finetuned_ucf101_split_3"
 feature_folder_sport1m = "/home/minhkv/feature/sport1m"
 
 #  Change the following parameters for each split 
 type_feature_file = "bin" # for classify
-pretrained = finetuned_ucf101_split2 # for feature extraction, finetuning
-layer = "prob" # for converting and classify
-mean_file = mean_file_ucf_split_2
-output_feature_folder = feature_folder_ucf_split_2 # for feature extraction, classify
-train_split_file_path = train_split_2_file_path # finetune, feature extract, classify, convert
-test_split_file_path = test_split_2_file_path # finetune, feature extract, classify, convert
+pretrained = finetuned_ucf101_split1 # for feature extraction, finetune
+layer = "fc6" # for converting and classify
+mean_file = mean_file_ucf_split_1
+output_feature_folder = feature_folder_ucf_split_1 # for feature extract, classify
+train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert
+test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert
 
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
@@ -54,8 +56,8 @@ if len(sys.argv) > 1:
 clf = SVC(kernel="linear", C=0.025) # classify
 
 # For lost file
-train_split_file_path = lost_train_file_path
-test_split_file_path = lost_test_file_path
+# train_split_file_path = lost_train_file_path
+# test_split_file_path = lost_test_file_path
 
 # For demo
 # train_split_file_path = sample_train_file_path
