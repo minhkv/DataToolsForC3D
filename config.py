@@ -44,7 +44,7 @@ feature_folder_sport1m = "/home/minhkv/feature/sport1m"
 #  Change the following parameters for each split 
 type_feature_file = "bin" # for classify
 pretrained = finetuned_ucf101_split3 # for feature extraction, finetune, test
-layer = "prob" # for converting and classify
+layer = "fc6" # for converting and classify
 mean_file = mean_file_ucf_split_3 # feature extract, finetune, test
 output_feature_folder = feature_folder_ucf_split_1 # for feature extract, classify
 train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
