@@ -36,12 +36,13 @@ class Classifier:
         self.type_feature_file = type_feature_file
 
     def read_bin(self, filename):
-        with open(filename, 'rb') as f:
-            s = f.read()
-            (n, c, l, h, w) = array.array("i", s[:20])
-            feature = array.array("f", s[20:])
-            feature_vec = np.array(array.array("f", [float("{:16f}".format(i)) for i in feature]))
-            return feature_vec
+		with open(filename, 'rb') as f:
+			s = f.read()
+			(n, c, l, h, w) = array.array("i", s[:20])
+			feature_vec = array.array("f", s[20:])
+			if not self.layer == "prob":
+				feature_vec = np.array(array.array("f", [float("{:16f}".format(i)) for i in feature_vec]))
+		return feature_vec
     def read_csv(self, filename):
         with open(filename, 'rb') as csvfile:
             feature=np.array([float(w) for w in csvfile.read().split(',')])
@@ -59,6 +60,12 @@ class Classifier:
     def get_list_feature_in_folder(self, path, layer):
         listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         return listfiles
+
+    def combine_list_feature(self, list_feature):
+        features = [self.read_feature_file(csv_file) for csv_file in list_feature]
+        feature = np.mean(features, axis=0)
+        return feature
+
     def load_feature_from_folder_and_average(self, split_file):
         split_input = []
         split_label = []
@@ -72,8 +79,7 @@ class Classifier:
                     self.empty_folder.append(os.path.join(class_name, input_name))
                     continue
                 self.test_name.append(feature_folder)
-                features = [self.read_feature_file(csv_file) for csv_file in list_feature]
-                features = np.mean(features, axis=0)
+                features = self.combine_list_feature(list_feature)
                 split_input.append(features)
                 split_label.append(label)
         except IOError as er:
