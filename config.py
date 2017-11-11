@@ -12,6 +12,10 @@ classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
 input_chunk_list_line_syntax = "{0} {1} {2}\n"
 output_chunk_list_line_syntax = "{0}/{1:06d}\n"
 
+input_chunk_file = os.path.join(temp, "input.txt")
+output_chunk_file = os.path.join(temp, "output.txt")
+
+empty_split_file_path = os.path.join(asset_path, "empty.txt")
 sample_train_file_path = os.path.join(asset_path, "sample_train.txt")
 sample_test_file_path = os.path.join(asset_path, "sample_test.txt")
 
@@ -64,8 +68,8 @@ clf = SVC(kernel="linear", C=0.025) # classify
 # test_split_file_path = lost_test_file_path
 
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 

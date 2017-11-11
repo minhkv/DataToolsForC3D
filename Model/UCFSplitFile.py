@@ -42,6 +42,7 @@ class UCFSplitFile:
         "Concatenate the name, label list of two UCFSplitFile"
         self.name.extend(split_file.name)
         self.label.extend(split_file.label)
+        self.num_frames.extend(split_file.num_frames)
     def count_frame(self):
         """This function only work after defined exactly filename"""
         if self.use_image:

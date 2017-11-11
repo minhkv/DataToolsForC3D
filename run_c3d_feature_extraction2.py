@@ -5,24 +5,22 @@ import os
 import copy
 sys.path.extend(["Model", "Command"])
 import config
+import instance
 from module_model import *
 from module_command import *
 
-c3d = C3D(
-	root_folder="/home/minhkv/C3D/C3D-v1.0/", 
-	c3d_mode=C3D_Mode.FEATURE_EXTRACTION,
-	pre_trained=os.path.join(config.output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000"),
-	use_image=False)
+c3d = instance.c3d_feature_extraction_ucf101
 c3d.generate_prototxt()
 
+train_file = instance.train_file
+test_file = instance.test_file
+out_file = instance.out_file_empty
 
-train_file = UCFSplitFile(
-	r"(?P<label>\w+)/(?P<name>.+)", 
-	config.test_split_3_file_path,
-	use_image=False)
 train_file.load_name_and_label()
-# train_file.concatenate(test_file)
-out_file = copy.copy(train_file)
+test_file.load_name_and_label()
+train_file.concatenate(test_file)
+
+
 print("Loaded: {} label".format(len(train_file.name)))
 
 def add_input_folder_prefix(path):
@@ -37,20 +35,19 @@ def dummy_label(label):
 
 train_file.preprocess_name(add_input_folder_prefix)
 train_file.preprocess_label(dummy_label)
-out_file.preprocess_name(add_out_folder_prefix)
 
 print("Counting frame")
 train_file.count_frame()
+out_file.concatenate(train_file)
 
 createList = CreateListPrefix(
 	split_file=train_file,
 	output_feature_file=out_file, 
 	use_image=False
 	)
-createList.execute()
-
 create_output_folder = CreateFeatureFolder(out_file)
-create_output_folder.execute()
-
 feature_extraction = FeatureExtraction(c3d)
-feature_extraction.execute()
+
+createList.execute()
+# create_output_folder.execute()
+# feature_extraction.execute()
