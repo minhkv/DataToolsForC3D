@@ -3,7 +3,7 @@ import re
 from Video import *
 class UCFSplitFile: 
     """"""
-    def __init__(self, syntax, path, use_image=True):
+    def __init__(self, syntax, path, clip_size=16, use_image=True):
         self.syntax = syntax
         self.path = path
         self.name = []
@@ -11,6 +11,8 @@ class UCFSplitFile:
         self.map_label_to_name = {}
         self.map_name_to_label = {}
         self.num_frames = []
+        self.clip_size = clip_size
+        self.chunk_list = []
         self.use_image = use_image
     def load_name_and_label(self):
         try:
@@ -40,6 +42,22 @@ class UCFSplitFile:
                 video = Video(vid)
                 num_fr, fps = video.get_frame_count()
                 self.num_frames.append(num_fr)
+    def create_chunk_list(self, name, label, num_frames):
+        start_frame = []
+        start = 0
+        if self.use_image:
+            start = 1
+        for num_frame in num_frames:
+            start_frame.append(range(start, num_frame - 32, self.clip_size))
+        for i, name_item in enumerate(name):
+            for num_frame in start_frame[i]:
+                self.chunk_list.append([name_item, num_frame, label[i]])
+        
+    def write_chunk_list_to_file(self, path, syntax):
+        with open(path, "w") as fp:
+            for args in self.chunk_list:
+                # line = syntax.format(*chunk_list)
+                fp.write(syntax.format(*args))
     def preprocess_name(self, process):
         self.name = [process(n) for n in self.name]
     def preprocess_label(self, process):
