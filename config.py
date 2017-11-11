@@ -9,6 +9,9 @@ train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
 classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
 
+input_chunk_list_line_syntax = "{0} {1} {2}\n"
+output_chunk_list_line_syntax = "{0}/{1:06d}\n"
+
 sample_train_file_path = os.path.join(asset_path, "sample_train.txt")
 sample_test_file_path = os.path.join(asset_path, "sample_test.txt")
 

@@ -43,13 +43,15 @@ class CreateListPrefix(Command):
         return chunk_list
     def execute(self):
         print("[Info] Creating input_chunk_list")
-        input_chunk_list = self.create_chunk_list(
-            self.split_file.name,
-            self.split_file.label,
-            self.split_file.num_frames
-        )
-        print ("[Info] Writing input_chunk_list to file")
-        self.write_chunk_list_to_file(os.path.join(config.temp, "input.txt"), "{0} {1} {2}\n", input_chunk_list)
+        # input_chunk_list = self.create_chunk_list(
+        #     self.split_file.name,
+        #     self.split_file.label,
+        #     self.split_file.num_frames
+        # )
+        # print ("[Info] Writing input_chunk_list to file")
+        # self.write_chunk_list_to_file(os.path.join(config.temp, "input.txt"), "{0} {1} {2}\n", input_chunk_list)
+        self.split_file.create_chunk_list()
+        self.split_file.write_chunk_list_to_file()
         if self.output_feature_file != None: # if extract feature
             print("[Info] Creating output_chunk_list")
             output_chunk_list = self.create_chunk_list(
