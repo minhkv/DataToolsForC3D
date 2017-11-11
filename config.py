@@ -30,6 +30,7 @@ mean_file_ucf_split_2 = os.path.join(temp, "mean_split_2.binaryproto")
 mean_file_ucf_split_3 = os.path.join(temp, "mean_split_3.binaryproto")
 mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 
+report_folder = os.path.abspath("report")
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
 pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
@@ -60,8 +61,8 @@ clf = SVC(kernel="linear", C=0.025) # classify
 # test_split_file_path = lost_test_file_path
 
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 
