@@ -5,29 +5,22 @@ import os
 import copy
 sys.path.extend(["Model", "Command"])
 import config
+import instance
 from module_model import *
 from module_command import *
 
-c3d = C3D(
-	root_folder=config.c3d_root, 
-	c3d_mode=C3D_Mode.FEATURE_EXTRACTION_UCF101,
-	pre_trained=config.pretrained,
-	mean_file=config.mean_file,
-	use_image=False)
+c3d = instance.c3d_feature_extraction_ucf101
 c3d.generate_prototxt()
 
-train_file = UCFSplitFile(
-	r"(?P<name>.+) (?P<label>\w+)", 
-	config.train_split_file_path,
-	use_image=False)
+train_file = instance.train_file
+test_file = instance.test_file
+out_file = instance.out_file_empty
+
 train_file.load_name_and_label()
-test_file = UCFSplitFile(
-	r"(?P<label>\w+)/(?P<name>.+)", 
-	config.test_split_file_path,
-	use_image=False)
 test_file.load_name_and_label()
 train_file.concatenate(test_file)
-out_file = copy.copy(train_file)
+
+
 print("Loaded: {} label".format(len(train_file.name)))
 
 def add_input_folder_prefix(path):
@@ -42,10 +35,10 @@ def dummy_label(label):
 
 train_file.preprocess_name(add_input_folder_prefix)
 train_file.preprocess_label(dummy_label)
-out_file.preprocess_name(add_out_folder_prefix)
 
 print("Counting frame")
 train_file.count_frame()
+out_file.concatenate(train_file)
 
 createList = CreateListPrefix(
 	split_file=train_file,

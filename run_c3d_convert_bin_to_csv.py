@@ -8,11 +8,7 @@ import config
 from module_model import *
 from module_command import *
 
-c3d = C3D(
-	root_folder=config.c3d_root, 
-	c3d_mode=C3D_Mode.FEATURE_EXTRACTION_UCF101,
-	pre_trained=config.pretrained,
-	use_image=False)
+c3d = instance.c3d_feature_extraction_ucf101
 c3d.generate_prototxt()
 
 all_ucf101 = UCFSplitFile(
