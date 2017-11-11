@@ -36,7 +36,7 @@ class CreateListPrefix(Command):
         if self.use_image:
             start = 1
         for num_frame in num_frames:
-            start_frame.append(range(start, num_frame - 17, 16))
+            start_frame.append(range(start, num_frame - 32, 16))
         for i, name_item in enumerate(name):
             for num_frame in start_frame[i]:
                 chunk_list.append([name_item, num_frame, label[i]])

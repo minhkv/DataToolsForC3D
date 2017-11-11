@@ -3,14 +3,17 @@ now=$(date)
 # name="feature_extraction_lost_sport1m"
 # name="convert_lost_ucf_2_fc6"
 # name="test_net_finetune_ucf_3"
-name="classify_ucf_1_fc6_mid"
+name="test_net_train_error_ucf_2"
+# name="classify_ucf_1_fc6_mid_average"
 
 # run_file=run_c3d_feature_extraction.py
 # run_file=run_c3d_convert_bin_to_csv.py
 # run_file=run_c3d_test_net.py
+run_file=run_c3d_test_train_error.py
 # run_file=run_c3d_classify.py
 # run_file=run_classifier_prob.py
-run_file=run_classify_mid_feature.py
+# run_file=run_classify_mid_feature.py
+# run_file=AnalyseData.py
 
 report_folder=report
 

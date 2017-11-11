@@ -8,8 +8,10 @@ class ClassifierFrom2Features(Classifier):
         list_feature = sorted(list_feature)
         mid = num_feature / 2
         feature = self.read_feature_file(list_feature[mid])
-        if mid == 0:
-            feature = feature * 2
-        else:
-            feature = self.read_feature_file(list_feature[mid - 1]) + feature
+        # if mid == 0:
+        #     feature = feature * 2
+        # else:
+        #     feature = self.read_feature_file(list_feature[mid - 1]) + feature
+        features = [self.read_feature_file(csv_file) for csv_file in list_feature[mid - 1:mid + 1]]
+        feature = np.mean(features, axis=0)
         return feature

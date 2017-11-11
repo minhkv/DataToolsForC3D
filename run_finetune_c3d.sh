@@ -1,6 +1,6 @@
 STARTTIME=$(date +%s)
 now=$(date)
-name="finetune_ucf_2"
+name="finetune_ucf_2_demo"
 run_file=run_finetune_c3d.py
 mkdir -p report_$name
 echo "$now start $name" >> time_$name.txt

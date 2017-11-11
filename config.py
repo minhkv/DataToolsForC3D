@@ -44,12 +44,12 @@ feature_folder_sport1m = "/home/minhkv/feature/sport1m"
 
 #  Change the following parameters for each split 
 type_feature_file = "bin" # for classify
-pretrained = finetuned_ucf101_split3 # for feature extraction, finetune, test
+pretrained = finetuned_ucf101_split2 # for feature extraction, finetune, test
 layer = "fc6" # for converting and classify
-mean_file = mean_file_ucf_split_3 # feature extract, finetune, test
+mean_file = mean_file_ucf_split_2 # feature extract, finetune, test
 output_feature_folder = feature_folder_ucf_split_1 # for feature extract, classify
-train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
-test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
+train_split_file_path = train_split_2_file_path # finetune, feature extract, classify, convert, test
+test_split_file_path = test_split_2_file_path # finetune, feature extract, classify, convert, test
 
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
@@ -61,8 +61,8 @@ clf = SVC(kernel="linear", C=0.025) # classify
 # test_split_file_path = lost_test_file_path
 
 # For demo
-train_split_file_path = sample_train_file_path
-test_split_file_path = sample_test_file_path
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 
