@@ -27,9 +27,7 @@ class C3D:
             self.mean_file = mean_file
         self.model_config = os.path.join(asset_path, c3d_mode.value)
             
-        self.pre_trained = os.path.join(asset_path, "pretrained")
-        if self.pre_trained != None:
-            self.pre_trained = pre_trained
+        self.pre_trained = pre_trained
         self.chart_type = chart_type.value
         self.solver_config = os.path.join(asset_path, "c3d_ucf101_finetuning_solver.prototxt")
         if solver_config != None:
@@ -106,7 +104,20 @@ class C3D:
         print("[Info] Feature extraction: \n{}".format(' '.join(cmd)))
         return_code = os.system(' '.join(cmd))
         return return_code
-        
+    
+    def train(self):
+        train_net_bin = os.path.join(self.root_folder, "build", "tools", "train_net.bin")
+        cmd = [
+            "GLOG_logtostderr=1",
+            train_net_bin,
+            self.solver_prototxt
+        ]
+        if self.pre_trained != None:
+            cmd.append(self.pre_trained)
+        print("[Info] Train net: \n{}".format(' '.join(cmd)))
+        return_code = os.system(' '.join(cmd))
+        return return_code
+
     def finetune(self):
         fine_tune_bin = os.path.join(self.root_folder, "build", "tools", "finetune_net.bin")
         cmd = [

@@ -10,3 +10,4 @@ from TestNet import *
 from DrawLearningCurve import *
 from CreateFeatureFolder import *
 from FeatureExtraction import *
+from Train import *

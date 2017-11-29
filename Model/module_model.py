@@ -6,3 +6,4 @@ from C3DChartType import *
 from Classifier import *
 from ClassfiierUsingProb import *
 from ClassifierFrom2Features import *
+from ClassifierForRankpool import *

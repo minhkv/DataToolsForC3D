@@ -58,7 +58,7 @@ class UCFSplitFile:
         if self.use_image:
             start = 1
         for num_frame in self.num_frames:
-            start_frame.append(range(start, num_frame - 32, self.clip_size))
+            start_frame.append(range(start, num_frame - self.clip_size * 2, self.clip_size))
         for i, name_item in enumerate(self.name):
             for num_frame in start_frame[i]:
                 self.chunk_list.append([name_item, num_frame, self.label[i]])

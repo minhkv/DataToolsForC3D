@@ -43,9 +43,13 @@ class Classifier:
 			if not self.layer == "prob":
 				feature_vec = np.array(array.array("f", [float("{:16f}".format(i)) for i in feature_vec]))
 		return feature_vec
-    def read_csv(self, filename):
+    def read_csv(self, filename, sep=','):
         with open(filename, 'rb') as csvfile:
-            feature=np.array([float(w) for w in csvfile.read().split(',')])
+            feature=np.array([float(w) for w in csvfile.read().split(sep) if w])
+            # for w in csvfile.read().split(sep):
+            #     print(repr(w))
+            #     if (w):
+            #         v = float(w)
             return feature
     def read_feature_file(self, filename):
         if(self.type_feature_file == "bin"):
