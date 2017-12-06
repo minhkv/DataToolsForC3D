@@ -1,10 +1,13 @@
 import os
 import sys
 from sklearn.svm import SVC
+from sklearn.metrics.pairwise import chi2_kernel
+import numpy as np
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
+solver_train_ucf101 = os.path.join(asset_path, "solver_train_ucf101.txt")
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
 classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
@@ -44,32 +47,55 @@ pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_19000
 finetuned_ucf101_split1 = os.path.join(output_fine_tuned_net, "Split_1", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split3 = os.path.join(output_fine_tuned_net, "Split_3", "c3d_ucf101_finetune_whole_iter_20000")
-feature_folder_ucf_split_1 = "/home/minhkv/feature/finetuned_ucf101_split_1"
-feature_folder_ucf_split_2 = "/home/minhkv/feature/finetuned_ucf101_split_2"
-feature_folder_ucf_split_3 = "/home/minhkv/feature/finetuned_ucf101_split_3"
-feature_folder_sport1m = "/home/minhkv/feature/sport1m"
+feature_folder_ucf_split_1 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_1"
+feature_folder_ucf_split_2 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_2"
+feature_folder_ucf_split_3 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_3"
+feature_folder_sport1m = "/home/minhkv/datasets/feature/minhkv/sport1m"
+# w_2 for 2nd kernel
+feature_folder_sport1m_w = "/home/minhkv/feature/sport1m_rankpooling_w"
 
 #  Change the following parameters for each split 
-type_feature_file = "bin" # for classify
+type_feature_file = "" # for classify
 pretrained = finetuned_ucf101_split2 # for feature extraction, finetune, test
-layer = "fc6" # for converting and classify
+layer = "fc6-1" # for converting and classify
 mean_file = mean_file_ucf_split_2 # feature extract, finetune, test
-output_feature_folder = feature_folder_ucf_split_1 # for feature extract, classify
-train_split_file_path = train_split_2_file_path # finetune, feature extract, classify, convert, test
-test_split_file_path = test_split_2_file_path # finetune, feature extract, classify, convert, test
+output_feature_folder = feature_folder_sport1m_w # for feature extract, classify, convert
+train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
+test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
+
+def chi_square(X, Y):
+    n_samples_X = X.shape[0]
+    n_samples_Y = Y.shape[0]
+    n_features = X.shape[1]
+    result = np.zeros((n_samples_X, n_samples_Y))
+    for i in range(n_samples_X):
+        print("[Info] Row {}".format(i))
+        for j in range(n_samples_Y):
+            res = 0
+            for k in range(n_features):
+                denom = 2 * X[i, k] * Y[j, k]
+                nom = (X[i, k] + Y[j, k])
+                if nom != 0:
+                    res  += denom / float(nom)
+            result[i, j] = res
+    return result
 
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
 clf = SVC(kernel="linear", C=0.025) # classify
+# clf = SVC(kernel=chi_square, C=0.025) # classify
+clf_precomputed = SVC(kernel="precomputed") # classify
 
 # For lost file
 # train_split_file_path = lost_train_file_path
 # test_split_file_path = lost_test_file_path
+# train_split_file_path = empty_split_file_path
+# test_split_file_path = "/home/minhkv/script/DataToolsForC3D/Asset/analyse_w_list.txt"
 
 # For demo
-train_split_file_path = sample_train_file_path
-test_split_file_path = sample_test_file_path
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 

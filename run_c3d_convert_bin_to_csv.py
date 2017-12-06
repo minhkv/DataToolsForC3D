@@ -7,6 +7,7 @@ sys.path.extend(["Model", "Command"])
 import config
 from module_model import *
 from module_command import *
+import instance
 
 c3d = instance.c3d_feature_extraction_ucf101
 c3d.generate_prototxt()

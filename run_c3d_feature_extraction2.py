@@ -16,6 +16,8 @@ train_file = instance.train_file
 test_file = instance.test_file
 out_file = instance.out_file_empty
 
+train_file.clip_size = 60
+out_file.clip_size = 60
 train_file.load_name_and_label()
 test_file.load_name_and_label()
 train_file.concatenate(test_file)
@@ -49,5 +51,5 @@ create_output_folder = CreateFeatureFolder(out_file)
 feature_extraction = FeatureExtraction(c3d)
 
 createList.execute()
-# create_output_folder.execute()
-# feature_extraction.execute()
+create_output_folder.execute()
+feature_extraction.execute()

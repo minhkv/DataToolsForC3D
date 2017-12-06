@@ -31,7 +31,7 @@ print("Loaded: {} test label".format(len(test_file.name)))
 
 def add_input_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
-	return os.path.join(config.output_feature_folder, os.path.basename(video_name))
+	return os.path.join(config.output_feature_folder, config.type_feature_file, os.path.basename(video_name))
 def subtract_label(label):
 	return int(label) - 1
 def convert_and_subtract_label(label):

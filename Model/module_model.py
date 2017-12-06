@@ -7,3 +7,4 @@ from Classifier import *
 from ClassfiierUsingProb import *
 from ClassifierFrom2Features import *
 from ClassifierForRankpool import *
+from ClassifierDI import *
