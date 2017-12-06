@@ -6,6 +6,7 @@ import os
 import sys
 import array
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, classification_report
+from sklearn.preprocessing import MinMaxScaler
 class Classifier:
     def __init__(
         self, 
@@ -96,15 +97,18 @@ class Classifier:
         self.test_input, self.test_label = self.load_feature_from_folder_and_average(self.test_file)
         print ("[Info] Loaded {} train feature".format(len(self.train_label)))
         print ("[Info] Loaded {} test feature".format(len(self.test_label)))
+    def transform_data(self):
+        print("[Info] Transforming feature to range (0, 1)")
+        scaler = MinMaxScaler(feature_range=(0, 10))
+        scaler.fit(self.train_input)
+        self.train_input = scaler.transform(self.train_input)
+        self.test_input = scaler.transform(self.test_input)
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
     def testing(self):
         print("[Info] Testing classifier {}".format(self.name))
         self.test_pred = self.classifier.predict(self.test_input)
-        # self.precision = precision_score(self.test_label, self.test_pred, average='macro')
-        # self.recall = recall_score(self.test_label, self.test_pred, average='macro')
-        # self.accuracy = accuracy_score(self.test_label, self.test_pred)
         self.confusion_matrix = confusion_matrix(
             y_true=self.test_label,
             y_pred=self.test_pred, 
