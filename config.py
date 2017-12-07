@@ -1,8 +1,11 @@
 import os
 import sys
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics.pairwise import chi2_kernel
+from sklearn.kernel_approximation import AdditiveChi2Sampler
 import numpy as np
+from sklearn import pipeline
+
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
@@ -63,28 +66,14 @@ output_feature_folder = feature_folder_sport1m_w # for feature extract, classify
 train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
 test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
 
-def chi_square(X, Y):
-    n_samples_X = X.shape[0]
-    n_samples_Y = Y.shape[0]
-    n_features = X.shape[1]
-    result = np.zeros((n_samples_X, n_samples_Y))
-    for i in range(n_samples_X):
-        print("[Info] Row {}".format(i))
-        for j in range(n_samples_Y):
-            res = 0
-            for k in range(n_features):
-                denom = 2 * X[i, k] * Y[j, k]
-                nom = (X[i, k] + Y[j, k])
-                if nom != 0:
-                    res  += denom / float(nom)
-            result[i, j] = res
-    return result
-
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
-clf = SVC(kernel="linear", C=0.025) # classify
-# clf = SVC(kernel=chi_square, C=0.025) # classify
+# clf = SVC(kernel="linear", C=0.025) # classify
+# clf = SVC(kernel=chi2_kernel, C=0.025) # classify
+
+feature_map = AdditiveChi2Sampler()
+clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
 clf_precomputed = SVC(kernel="precomputed") # classify
 
 # For lost file
