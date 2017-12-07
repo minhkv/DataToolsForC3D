@@ -1,0 +1,15 @@
+**/*.pyc
+*.pyc
+*/*.pyc
+*.solverstate
+*.binaryproto
+c3d_ucf101_finetune_whole_iter*
+*.txt
+.vscode/
+*.out
+Finetuned_net/
+*.log
+*log.train
+*log.test
+report*
+*.csv
