@@ -70,9 +70,9 @@ classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
 # clf = SVC(kernel="linear", C=0.025) # classify
+# clf = SVC(kernel="rbf", C=0.025) # classify
 # clf = SVC(kernel=chi2_kernel, C=0.025) # classify
-
-feature_map = AdditiveChi2Sampler()
+feature_map = AdditiveChi2Sampler(sample_steps=2)
 clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
 clf_precomputed = SVC(kernel="precomputed") # classify
 

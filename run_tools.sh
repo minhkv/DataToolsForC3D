@@ -4,7 +4,7 @@ now=$(date)
 # name="convert_lost_ucf_2_fc6"
 # name="test_net_finetune_ucf_3"
 # name="test_net_train_error_ucf_2"
-name="classify_sport1m_fc6_rankpool_chi2"
+name="classify_sport1m_fc6_rankpool_additive_chi2_sample1"
 
 # run_file=run_c3d_feature_extraction.py
 # run_file=run_c3d_convert_bin_to_csv.py
