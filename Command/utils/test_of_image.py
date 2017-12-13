@@ -24,10 +24,10 @@ def test_list_of(u_folder, v_folder, flow_folder):
     quality = np.sum(result) / float(len(result))
     return quality
 
-flow_folder = '/media/minhkv/Data/HocTap/Baitap/Python/PythonMachineLearning/data'
-video_name = 'v_ApplyEyeMakeup_g01_c01'
-output_folder = '/media/minhkv/Data/HocTap/Baitap/Python/PythonMachineLearning/data/flow'
-u_folder = os.path.join(flow_folder, 'u', video_name)
-v_folder = os.path.join(flow_folder, 'v', video_name)
-result_test = test_list_of(u_folder, v_folder, output_folder)
-print(test_list_of(u_folder, v_folder, output_folder))
+# flow_folder = '/media/minhkv/Data/HocTap/Baitap/Python/PythonMachineLearning/data'
+# video_name = 'v_ApplyEyeMakeup_g01_c01'
+# output_folder = '/media/minhkv/Data/HocTap/Baitap/Python/PythonMachineLearning/data/flow'
+# u_folder = os.path.join(flow_folder, 'u', video_name)
+# v_folder = os.path.join(flow_folder, 'v', video_name)
+# result_test = test_list_of(u_folder, v_folder, output_folder)
+# print(test_list_of(u_folder, v_folder, output_folder))

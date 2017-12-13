@@ -27,7 +27,7 @@ def stack_image(u_path, v_path):
     # flow = np.stack((flow_u, flow_v), axis=-1)
     return flow 
 def list_image_in_folder(folder, type_image="jpg"):
-    list_image = glob.glob(os.path.join(folder, "frame*.{}".format(type_image)))
+    list_image = glob.glob(os.path.join(folder, "*.{}".format(type_image)))
     list_image.sort()
     return list_image
 def create_of_image(u_folder, v_folder):

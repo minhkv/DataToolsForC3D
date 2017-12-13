@@ -12,3 +12,4 @@ from CreateFeatureFolder import *
 from FeatureExtraction import *
 from Train import *
 from CreateOFImage import *
+from TestOFImage import *

@@ -26,9 +26,11 @@ train_file.concatenate(test_file)
 print("Loaded: {} label".format(len(train_file.name)))
 
 def add_u_folder_prefix(path):
-	return os.path.join(config.ucf101_tvl1_flow_folder, 'u', os.path.basename(path))
+	name = os.path.basename(path).split('.')[0]
+	return os.path.join(config.ucf101_tvl1_flow_folder, 'u', name)
 def add_v_folder_prefix(path):
-	return os.path.join(config.ucf101_tvl1_flow_folder, 'v', os.path.basename(path))
+	name = os.path.basename(path).split('.')[0]
+	return os.path.join(config.ucf101_tvl1_flow_folder, 'v', name)
 def add_out_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
 	return os.path.join(config.ucf101_stack_tvl1_folder, os.path.basename(video_name))
@@ -47,6 +49,8 @@ out_file.preprocess_name(add_out_folder_prefix)
 
 create_output_folder = CreateFeatureFolder(out_file)
 create_of_image = CreateOFImage(u_file, v_file, out_file)
+test_of = TestOFImage(u_file, v_file, out_file)
 
-# create_output_folder.execute()
+create_output_folder.execute()
 create_of_image.execute()
+# test_of.execute()
