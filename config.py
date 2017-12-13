@@ -2,10 +2,11 @@ import os
 import sys
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics.pairwise import chi2_kernel
-from sklearn.kernel_approximation import AdditiveChi2Sampler
+from sklearn.kernel_approximation import AdditiveChi2Sampler, RBFSampler, SkewedChi2Sampler
 from kernel.pairwise import *
 import numpy as np
 from sklearn import pipeline
+from sklearn.preprocessing import MinMaxScaler
 
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
@@ -47,6 +48,8 @@ mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 report_folder = os.path.abspath("report")
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
+ucf101_tvl1_flow_folder = "/home/minhkv/datasets/ucf101_tvl1_flow/ucf101_tvl1_flow"
+ucf101_stack_tvl1_folder = "/home/minhkv/datasets/feature/tvl1_flow"
 pre_trained_sport1m="/home/minhkv/pre-trained/conv3d_deepnetA_sport1m_iter_1900000"
 finetuned_ucf101_split1 = os.path.join(output_fine_tuned_net, "Split_1", "c3d_ucf101_finetune_whole_iter_20000")
 finetuned_ucf101_split2 = os.path.join(output_fine_tuned_net, "Split_2", "c3d_ucf101_finetune_whole_iter_20000")
@@ -70,12 +73,20 @@ test_split_file_path = test_split_1_file_path # finetune, feature extract, class
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
-# clf = SVC(kernel="linear", C=0.025) # classify
-# clf = SVC(kernel="rbf", C=0.025) # classify
-# clf = SVC(kernel=chi2_kernel, C=0.025) # classify
+clf = SVC(kernel="linear") # classify
+clf = SVC(kernel="rbf", C=100) # classify
+
 clf = SVC(kernel=additive_chi_square_kernel, C=0.025)
-# feature_map = AdditiveChi2Sampler(sample_steps=2)
-# clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
+clf = SVC(kernel=additive_chi_square_kernel, C=0.005)
+feature_map = AdditiveChi2Sampler(sample_steps=2)
+# # feature_map = SkewedChi2Sampler()
+# # feature_map = RBFSampler()
+clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
+clf.set_params(svm__C=0.01)
+
+feature_map = MinMaxScaler(feature_range=(0, 10))
+clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
+
 clf_precomputed = SVC(kernel="precomputed") # classify
 
 # For lost file
@@ -85,8 +96,8 @@ clf_precomputed = SVC(kernel="precomputed") # classify
 # test_split_file_path = "/home/minhkv/script/DataToolsForC3D/Asset/analyse_w_list.txt"
 
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 

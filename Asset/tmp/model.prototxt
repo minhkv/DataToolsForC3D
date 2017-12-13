@@ -5,9 +5,9 @@ layers {
   top: "data"
   top: "label"
   image_data_param {
-    source: "/home/minhkv/script/DataToolsForC3D/Asset/tmp/input.txt"
+    source: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/input.txt"
     use_image: false
-    mean_file: "/home/minhkv/script/DataToolsForC3D/Asset/tmp/mean_split_2.binaryproto"
+    mean_file: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/mean_split_2.binaryproto"
     batch_size: 30
     crop_size: 112
     mirror: false

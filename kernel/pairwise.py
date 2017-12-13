@@ -94,10 +94,10 @@ def additive_chi_square_kernel(X, Y=None):
     if issparse(X) or issparse(Y):
         raise ValueError("additive_chi2 does not support sparse matrices.")
     X, Y = check_pairwise_arrays(X, Y)
-    if (X < 0).any():
-        raise ValueError("X contains negative values.")
-    if Y is not X and (Y < 0).any():
-        raise ValueError("Y contains negative values.")
+    # if (X < 0).any():
+    #     raise ValueError("X contains negative values.")
+    # if Y is not X and (Y < 0).any():
+    #     raise ValueError("Y contains negative values.")
 
     result = np.zeros((X.shape[0], Y.shape[0]), dtype=X.dtype)
     _chi_square_kernel_fast(X, Y, result)

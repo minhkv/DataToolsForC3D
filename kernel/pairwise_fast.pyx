@@ -46,5 +46,5 @@ def _chi_square_kernel_fast(floating_array_2d_t X,
                     denom = 2 * X[i, k] * Y[j, k]
                     nom = (X[i, k] + Y[j, k])
                     if nom != 0:
-                        res  += denom * denom / nom
+                        res  += denom / nom
                 result[i, j] = res
