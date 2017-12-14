@@ -96,8 +96,8 @@ clf_precomputed = SVC(kernel="precomputed") # classify
 # test_split_file_path = "/home/minhkv/script/DataToolsForC3D/Asset/analyse_w_list.txt"
 
 # For demo
-train_split_file_path = sample_train_file_path
-test_split_file_path = sample_test_file_path
+# train_split_file_path = sample_train_file_path
+# test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 

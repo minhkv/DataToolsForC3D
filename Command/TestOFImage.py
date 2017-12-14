@@ -10,7 +10,11 @@ class TestOFImage(Command):
         self.v_file = v_file
         self.output_file = output_file
     def execute(self):
+        quality = 0
         for u_folder, v_folder, flow_folder in zip(self.u_file.name, self.v_file.name, self.output_file.name):
             print("[Info] Testing flow: {}".format(os.path.basename(u_folder)))
-            print (test_list_of(u_folder, v_folder, flow_folder))
+            q = test_list_of(u_folder, v_folder, flow_folder)
+            print ("[Info] Quality: {}".format(q))
+            quality += q
+        print("[Info] Quality of optical flow: {0}/{1}".format(quality, float(len(self.u_file.name))))
         

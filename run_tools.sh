@@ -5,7 +5,7 @@ now=$(date)
 # name="test_net_finetune_ucf_3"
 # name="test_net_train_error_ucf_2"
 # name="classify_sport1m_fc6_rankpool_linear"
-name="create_of_image"
+name="test_optical_flow_image"
 
 # run_file=run_c3d_feature_extraction.py
 # run_file=run_c3d_convert_bin_to_csv.py
