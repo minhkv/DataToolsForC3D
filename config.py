@@ -12,7 +12,10 @@ asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
-solver_train_ucf101 = os.path.join(asset_path, "solver_train_ucf101.txt")
+solver_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_solver.prototxt")
+
+
+
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
 classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
@@ -45,6 +48,8 @@ mean_file_ucf_split_2 = os.path.join(temp, "mean_split_2.binaryproto")
 mean_file_ucf_split_3 = os.path.join(temp, "mean_split_3.binaryproto")
 mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 
+mean_file_ucf_opt_flow_split_1 = os.path.join(temp, "mean_opt_flow_split_1.binaryproto")
+
 report_folder = os.path.abspath("report")
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
@@ -62,10 +67,14 @@ feature_folder_sport1m = "/home/minhkv/datasets/feature/minhkv/sport1m"
 feature_folder_sport1m_w = "/home/minhkv/feature/sport1m_rankpooling_w"
 
 #  Change the following parameters for each split 
+c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
+use_image = True
+type_image = "png"
+input_folder_prefix = ucf101_stack_tvl1_folder # for training, finetuning
 type_feature_file = "" # for classify
-pretrained = finetuned_ucf101_split2 # for feature extraction, finetune, test
+pretrained = "/home/minhkv/pre-trained/conv3d_ucf101_flow_s1_iter_20000.solverstate" # for feature extraction, finetune, test
 layer = "fc6-1" # for converting and classify
-mean_file = mean_file_ucf_split_2 # feature extract, finetune, test
+mean_file = mean_file_ucf_opt_flow_split_1 # feature extract, finetune, test
 output_feature_folder = feature_folder_sport1m_w # for feature extract, classify, convert
 train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
 test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
@@ -95,6 +104,8 @@ clf_precomputed = SVC(kernel="precomputed") # classify
 # train_split_file_path = empty_split_file_path
 # test_split_file_path = "/home/minhkv/script/DataToolsForC3D/Asset/analyse_w_list.txt"
 
+# ucf101_stack_tvl1_folder = "/home/minhkv/datasets/feature/tvl1_flow_test"
+# input_folder_prefix = ucf101_stack_tvl1_folder
 # For demo
 # train_split_file_path = sample_train_file_path
 # test_split_file_path = sample_test_file_path

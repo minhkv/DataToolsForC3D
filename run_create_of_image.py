@@ -24,12 +24,20 @@ train_file.concatenate(test_file)
 
 
 print("Loaded: {} label".format(len(train_file.name)))
-
+def replace_wrong_name(name):
+	wrong_name = "HandStandPushups"
+	right_name = "HandstandPushups"
+	new_name = name
+	if wrong_name in name:
+		new_name = name.replace(wrong_name, right_name)
+	return new_name
 def add_u_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
+	name = replace_wrong_name(name)
 	return os.path.join(config.ucf101_tvl1_flow_folder, 'u', name)
 def add_v_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
+	name = replace_wrong_name(name)
 	return os.path.join(config.ucf101_tvl1_flow_folder, 'v', name)
 def add_out_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
@@ -52,5 +60,5 @@ create_of_image = CreateOFImage(u_file, v_file, out_file)
 test_of = TestOFImage(u_file, v_file, out_file)
 
 # create_output_folder.execute()
-# create_of_image.execute()
+create_of_image.execute()
 test_of.execute()

@@ -53,6 +53,8 @@ class C3D:
         use_image = "false"
         if self.use_image:
             use_image = "true"
+        print("[Info] Get model config from: {}".format(self.model_config))
+        print("[Info] Get solver config from: {}".format(self.solver_config))
         self.generate_config_file(self.model_config, model_out, [self.input_prefix, self.mean_file, use_image])
         self.generate_config_file(self.solver_config, solver_out, [os.path.join(self.out_prototxt, model_out), ""])
         
@@ -65,7 +67,7 @@ class C3D:
         height = 128
         width = 171
         sampling_rate = 1
-        output_file = os.path.join(self.out_prototxt, "mean.binaryproto")
+        output_file = self.mean_file
         dropping_rate = 1
         cmd = [
             "GLOG_logtostderr=1",

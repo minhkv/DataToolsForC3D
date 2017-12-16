@@ -5,7 +5,7 @@ now=$(date)
 # name="test_net_finetune_ucf_3"
 # name="test_net_train_error_ucf_2"
 # name="classify_sport1m_fc6_rankpool_linear"
-name="test_optical_flow_image"
+name="train_optical_flow_image_from_20000"
 
 # run_file=run_c3d_feature_extraction.py
 # run_file=run_c3d_convert_bin_to_csv.py
@@ -15,7 +15,8 @@ name="test_optical_flow_image"
 # run_file=run_classifier_prob.py
 # run_file=run_classify_mid_feature.py
 # run_file=AnalyseData.py
-run_file=run_create_of_image.py
+# run_file=run_create_of_image.py
+run_file=run_c3d_compute_mean.py
 
 report_folder=report
 

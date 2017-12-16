@@ -10,6 +10,6 @@ class CreateOFImage(Command):
     def execute(self):
         for u_folder, v_folder, flow_folder in zip(self.u_file.name, self.v_file.name, self.output_file.name):
             flows = create_of_image(u_folder, v_folder)
-            save_of_image(flows, flow_folder)
+            save_of_image(flows, flow_folder, syntax="{:06d}.png")
             # print (os.path.exists(flow_folder))
         
