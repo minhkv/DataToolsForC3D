@@ -42,13 +42,12 @@ train_file.count_frame()
 
 createList = CreateListPrefix(
 	split_file=train_file,
-	output_feature_file=None, 
-	use_image=config.use_image
+	output_feature_file=None
 	)
 compute_mean = ComputeVolumeMean(c3d)
 train_c3d = Train(c3d)
 
 # createList.execute()
 # compute_mean.execute()
-train_c3d.execute()
+# train_c3d.execute()
 

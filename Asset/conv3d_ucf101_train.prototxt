@@ -8,7 +8,7 @@ layers {{
     source: "{0}"
     use_image: {2}
     mean_file: "{1}"
-    batch_size: 40
+    batch_size: 20
     crop_size: 112
     mirror: true
     show_data: 0

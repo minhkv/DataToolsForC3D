@@ -8,7 +8,8 @@ class C3D:
     def __init__(
         self, 
         root_folder, 
-        c3d_mode=C3D_Mode.TRAINING,        
+        c3d_mode=C3D_Mode.TRAINING,
+        model_config=None,        
         mean_file=None, 
         pre_trained=None, 
         solver_config=None,
@@ -26,7 +27,8 @@ class C3D:
         if mean_file != None:
             self.mean_file = mean_file
         self.model_config = os.path.join(asset_path, c3d_mode.value)
-            
+        if model_config != None:
+            self.model_config = model_config
         self.pre_trained = pre_trained
         self.chart_type = chart_type.value
         self.solver_config = os.path.join(asset_path, "c3d_ucf101_finetuning_solver.prototxt")

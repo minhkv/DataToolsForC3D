@@ -7,7 +7,7 @@ momentum: 0.9
 weight_decay: 0.005
 lr_policy: "step"
 gamma: 0.1
-stepsize: 80000
+stepsize: 40000
 # Display every 20 iterations
 display: 20
 # The maximum number of iterations

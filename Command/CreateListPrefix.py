@@ -10,19 +10,18 @@ import config
 
 """
     Create List Prefix for extracting feature or finetuning or testing
-    - Finetuning: provide split_file, input_folder, use_image
+    - Finetuning: provide split_file, input_folder
     - Testing: 
-    - Feature extraction: provide input_folder, use_image
+    - Feature extraction: provide input_folders
 """
 class CreateListPrefix(Command):
     def __init__(
         self, 
         split_file,
         output_feature_file=None, 
-        use_image=True):
+        ):
         self.split_file = split_file
         self.output_feature_file = output_feature_file
-        self.use_image = use_image
 
     def execute(self):
         self.split_file.create_chunk_list()

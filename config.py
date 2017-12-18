@@ -13,8 +13,9 @@ temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
 solver_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_solver.prototxt")
-
-
+model_test_ucf101 = os.path.join(asset_path, "conv3d_ucf101_test.prototxt")
+model_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_train.prototxt")
+model_feature_extractor_ucf101 = os.path.join(asset_path, "conv3d_ucf101_feature_extractor.prototxt")
 
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
@@ -63,6 +64,7 @@ feature_folder_ucf_split_1 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf
 feature_folder_ucf_split_2 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_2"
 feature_folder_ucf_split_3 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_3"
 feature_folder_sport1m = "/home/minhkv/datasets/feature/minhkv/sport1m"
+feature_folder_flow = "/home/minhkv/datasets/feature/minhkv/flow"
 # w_2 for 2nd kernel
 feature_folder_sport1m_w = "/home/minhkv/feature/sport1m_rankpooling_w"
 
@@ -71,31 +73,33 @@ c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
 use_image = True
 type_image = "png"
 input_folder_prefix = ucf101_stack_tvl1_folder # for training, finetuning
-type_feature_file = "" # for classify
-pretrained = "/home/minhkv/pre-trained/conv3d_ucf101_flow_s1_iter_20000.solverstate" # for feature extraction, finetune, test
-layer = "fc6-1" # for converting and classify
+type_feature_file = "bin" # for classify
+pretrained = "/home/minhkv/pre-trained/conv3d_ucf101_flow_s1_iter_60000" # for feature extraction, finetune, test
+model_config = model_feature_extractor_ucf101 # feature extract, train, test
+layer = "prob" # for converting and classify 
 mean_file = mean_file_ucf_opt_flow_split_1 # feature extract, finetune, test
-output_feature_folder = feature_folder_sport1m_w # for feature extract, classify, convert
+output_feature_folder = feature_folder_flow # for feature extract, classify, convert
 train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
 test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
 
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
-clf = SVC(kernel="linear") # classify
-clf = SVC(kernel="rbf", C=100) # classify
+# clf = SVC(kernel="linear") # classify
+# clf = SVC(kernel="rbf", C=100) # classify
 
-clf = SVC(kernel=additive_chi_square_kernel, C=0.025)
-clf = SVC(kernel=additive_chi_square_kernel, C=0.005)
-feature_map = AdditiveChi2Sampler(sample_steps=2)
+# clf = SVC(kernel=additive_chi_square_kernel, C=0.025)
+# clf = SVC(kernel=additive_chi_square_kernel, C=0.005)
+# feature_map = AdditiveChi2Sampler(sample_steps=2)
 # # feature_map = SkewedChi2Sampler()
 # # feature_map = RBFSampler()
-clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
-clf.set_params(svm__C=0.01)
+# clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
+# clf.set_params(svm__C=0.01)
 
 feature_map = MinMaxScaler(feature_range=(0, 10))
-clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
-
+estimator = SVC(kernel="rbf") # classify
+clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", estimator)])
+# clf = estimator
 clf_precomputed = SVC(kernel="precomputed") # classify
 
 # For lost file

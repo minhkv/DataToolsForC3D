@@ -12,4 +12,5 @@ class CreateFeatureFolder(Command):
     def execute(self):
         print("[Info] Creating binary feature folder")
         for folder in self.split_file.name:
+            print("[Create folder] {}".format(folder))
             self.make_dir_if_non_exist(folder)

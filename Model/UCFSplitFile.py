@@ -56,6 +56,7 @@ class UCFSplitFile:
             for image_folder in self.name:
                 list_image = self.list_image_in_folder_(image_folder, type_image=self.type_image)
                 num_fr = len(list_image)
+                print("[Count frame] {}: {}".format(image_folder, num_fr))
                 self.num_frames.append(num_fr)
         else:
             for vid in self.name:

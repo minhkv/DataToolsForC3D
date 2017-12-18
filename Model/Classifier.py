@@ -98,11 +98,12 @@ class Classifier:
         print ("[Info] Loaded {} train feature".format(len(self.train_label)))
         print ("[Info] Loaded {} test feature".format(len(self.test_label)))
     def transform_data(self):
-        print("[Info] Transforming feature to range (0, 10)")
-        scaler = MinMaxScaler(feature_range=(0, 10))
-        scaler.fit(self.train_input)
-        self.train_input = scaler.transform(self.train_input)
-        self.test_input = scaler.transform(self.test_input)
+        pass
+        # print("[Info] Transforming feature to range (0, 10)")
+        # scaler = MinMaxScaler(feature_range=(0, 10))
+        # scaler.fit(self.train_input)
+        # self.train_input = scaler.transform(self.train_input)
+        # self.test_input = scaler.transform(self.test_input)
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
