@@ -63,6 +63,7 @@ class Classifier:
         return feature
 
     def get_list_feature_in_folder(self, path, layer):
+        print("[Load] Loading: {}".format(path))
         listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         return listfiles
 
@@ -76,7 +77,7 @@ class Classifier:
         split_label = []
         try:
             for feature_folder, label in zip(split_file.name, split_file.label):
-                print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
+                # print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
                 list_feature = self.get_list_feature_in_folder(feature_folder, self.layer)
                 if len(list_feature) == 0:
                     class_name = self.class_ind.convert_label_to_name(str(label + 1))
@@ -104,6 +105,17 @@ class Classifier:
         # scaler.fit(self.train_input)
         # self.train_input = scaler.transform(self.train_input)
         # self.test_input = scaler.transform(self.test_input)
+    def fuse_with(self, clf, fuse_func=None):
+        """Fusion 2 classifier after load train_input
+        fuse_func: take two input vector and produce output fusion vector
+        """
+        if (len(self.train_input) != len(clf.train_input)):
+            raise ValueError("2 train_input not have same length")
+        if fuse_func != None:
+            self.train_input = [fuse_func(input1, input2) for input1, input2 in zip(self.train_input, clf.train_input)]
+        # else:
+
+
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
