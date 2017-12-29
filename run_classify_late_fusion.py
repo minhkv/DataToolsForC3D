@@ -8,6 +8,7 @@ sys.path.extend(["Model", "Command"])
 import config
 from module_model import *
 from module_command import *
+import instance
 
 
 def add_input_rgb_folder_prefix(path):
@@ -23,7 +24,8 @@ def convert_and_subtract_label(label):
 	return int(classInd.convert_name_to_label(label)) - 1
 
 def fuse_function(vect1, vect2):
-	fused_vec = np.array(vect1) + np.array(vect2)
+	a = 0.5
+	fused_vec = (a * np.array(vect1) + (1 - a) * np.array(vect2)) #/ 2.0
 	return fused_vec
 
 train_ucf101 = UCFSplitFile(
@@ -50,21 +52,21 @@ train_ucf101_flow = copy.copy(train_ucf101)
 test_ucf101_flow = copy.copy(test_file)
 
 #rgb
-train_ucf101.preprocess_name(add_input_rgb_folder_prefix)
-train_ucf101.preprocess_label(subtract_label)
+# train_ucf101.preprocess_name(add_input_rgb_folder_prefix)
+# train_ucf101.preprocess_label(subtract_label)
 
 test_file.preprocess_name(add_input_rgb_folder_prefix)
 test_file.preprocess_label(convert_and_subtract_label)
 
 #flow
-train_ucf101_flow.preprocess_name(add_input_flow_folder_prefix)
-train_ucf101_flow.preprocess_label(subtract_label)
+# train_ucf101_flow.preprocess_name(add_input_flow_folder_prefix)
+# train_ucf101_flow.preprocess_label(subtract_label)
 
 test_ucf101_flow.preprocess_name(add_input_flow_folder_prefix)
 test_ucf101_flow.preprocess_label(convert_and_subtract_label)
 
 classifier_rgb = ClassifierUsingProb(
-	train_file=train_ucf101, 
+	train_file=instance.out_file_empty, 
 	test_file=test_file, 
 	class_ind=classInd, 
 	classifier=config.clf,
@@ -73,7 +75,7 @@ classifier_rgb = ClassifierUsingProb(
 	type_feature_file=config.type_feature_file
 	)
 classifier_flow = ClassifierUsingProb(
-	train_file=train_ucf101_flow, 
+	train_file=instance.out_file_empty, 
 	test_file=test_ucf101_flow, 
 	class_ind=classInd, 
 	classifier=config.clf,
@@ -82,5 +84,8 @@ classifier_flow = ClassifierUsingProb(
 	type_feature_file=config.type_feature_file
 	)
 
-classify = Classify(classifier_rgb, classifier_flow, fuse_function)
+classify = Classify(classifier_flow, classifier_rgb, fuse_function)
 classify.execute()
+
+# classify_flow = Classify(classifier_flow)
+# classify_flow.execute()
