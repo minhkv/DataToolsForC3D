@@ -6,16 +6,24 @@ from sklearn.kernel_approximation import AdditiveChi2Sampler, RBFSampler, Skewed
 from kernel.pairwise import *
 import numpy as np
 from sklearn import pipeline
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, Normalizer
 
 asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
+
+model_feature_extractor_sport1m = os.path.join(asset_path, "c3d_sport1m_feature_extractor.prototxt")
+
 solver_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_solver.prototxt")
 model_test_ucf101 = os.path.join(asset_path, "conv3d_ucf101_test.prototxt")
 model_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_train.prototxt")
 model_feature_extractor_ucf101 = os.path.join(asset_path, "conv3d_ucf101_feature_extractor.prototxt")
+
+solver_finetuning_mica = os.path.join(asset_path, "c3d_mica_finetuning_solver.prototxt")
+model_finetune_mica_train = os.path.join(asset_path, "c3d_mica_finetuning_train.prototxt")
+model_finetune_mica_test = os.path.join(asset_path, "c3d_mica_finetuning_test.prototxt")
+model_finetune_mica_feature_extractor = os.path.join(asset_path, "c3d_mica_feature_extractor.prototxt")
 
 train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
 test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
@@ -50,7 +58,7 @@ mean_file_ucf_split_3 = os.path.join(temp, "mean_split_3.binaryproto")
 mean_file_sport1m = os.path.join(temp, "sport1m_train16_128_mean.binaryproto")
 
 mean_file_ucf_opt_flow_split_1 = os.path.join(temp, "mean_opt_flow_split_1.binaryproto")
-
+mean_mica_split = os.path.join(temp, "mean_mica_split.binaryproto")
 report_folder = os.path.abspath("report")
 
 ucf101_video_folder="/home/minhkv/datasets/UCF101"
@@ -64,40 +72,60 @@ feature_folder_ucf_split_1 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf
 feature_folder_ucf_split_2 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_2"
 feature_folder_ucf_split_3 = "/home/minhkv/datasets/feature/minhkv/finetuned_ucf101_split_3"
 feature_folder_sport1m = "/home/minhkv/datasets/feature/minhkv/sport1m"
+feature_folder_sport1m_dense = "/home/minhkv/feature/minhkv/sport1m_dense"
 feature_folder_flow = "/home/minhkv/datasets/feature/minhkv/flow"
+feature_folder_mica = "/home/minhkv/datasets/feature/minhkv/mica_4000"
+feature_folder_mica_dense = "/home/minhkv/datasets/feature/minhkv/mica_dense"
+feature_folder_mica_dense_rankpool = "/home/minhkv/feature/minhkv/Rankpool/mica_4000_dense"
+feature_folder_mica_rankpool = "/home/minhkv/feature/minhkv/Rankpool/mica_4000"
+feature_folder_mica_v5 = "/home/minhkv/datasets/feature/minhkv/mica_3200_v5_re"
+feature_folder_mica_v4 = "/home/minhkv/datasets/feature/minhkv/mica_2400_v4"
+feature_folder_mica_sport1m = "/home/minhkv/datasets/feature/minhkv/mica_sport1m_v5"
 # w_2 for 2nd kernel
 feature_folder_sport1m_w = "/home/minhkv/feature/sport1m_rankpooling_w"
 
+mica_annotation_path = "/home/minhkv/datasets/Kinect_vis_annotate/v5/Kinect3" # classify
+# mica_annotation_path = "/home/minhkv/datasets/Kinect_vis_annotate/v4/Kinect3" # classify
+
+mica_annotation_mapping_path = os.path.join(mica_annotation_path, "file_mapping.txt")
+mica_video_path = "/home/minhkv/datasets/Kinect2017-10/Datasets"
+test_mica_mapping = os.path.join(asset_path, "file_mapping_test.txt")
+# pretrained_mica = "/home/minhkv/pre-trained/mica/c3d_MICA_less_finetune_iter_3600"
+pretrained_mica = "/home/minhkv/pre-trained/mica_fix_label/c3d_MICA_finetune_iter_4000"
+
+mica_split_syntax = r"(?P<label>.+) (?P<start_in_video>.+) (?P<end_in_video>\w+) (?P<name>.+) (?P<order>.+)"
+mica_train_path = os.path.join(asset_path, 'mica_train.txt')
+mica_test_path = os.path.join(asset_path, 'mica_test.txt')
+
 #  Change the following parameters for each split 
 c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
-use_image = True
-type_image = "png"
-input_folder_prefix = ucf101_stack_tvl1_folder # for training, finetuning
+use_image = False
+type_image = "png" # training, finetune
+input_folder_prefix = mica_video_path # for training, finetune, test, feature extract
 type_feature_file = "bin" # for classify
-pretrained = "/home/minhkv/pre-trained/conv3d_ucf101_flow_s1_iter_60000" # for feature extraction, finetune, test
-model_config = model_feature_extractor_ucf101 # feature extract, train, test
-layer = "prob" # for converting and classify 
-mean_file = mean_file_ucf_opt_flow_split_1 # feature extract, finetune, test
-output_feature_folder = feature_folder_flow # for feature extract, classify, convert
+pretrained = pretrained_mica # for feature extract, finetune, test
+model_config = model_finetune_mica_feature_extractor # feature extract, train, test, finetune
+solver_config = solver_finetuning_mica # train, finetune
+layer = "prob" # for convert and classify 
+mean_file = mean_mica_split # feature extract, finetune, test
+output_feature_folder = feature_folder_mica # for feature extract, classify, convert
+
+# only ucf101
 train_split_file_path = train_split_1_file_path # finetune, feature extract, classify, convert, test
 test_split_file_path = test_split_1_file_path # finetune, feature extract, classify, convert, test
 
 classifier_name = "classifier_noname" # classify
 if len(sys.argv) > 1:
     classifier_name = sys.argv[1]
-# clf = SVC(kernel="linear") # classify
-# clf = SVC(kernel="rbf", C=100) # classify
-
-# clf = SVC(kernel=additive_chi_square_kernel, C=0.025)
 # clf = SVC(kernel=additive_chi_square_kernel, C=0.005)
 # feature_map = AdditiveChi2Sampler(sample_steps=2)
-# # feature_map = SkewedChi2Sampler()
-# # feature_map = RBFSampler()
 # clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", LinearSVC())])
 # clf.set_params(svm__C=0.01)
 
-feature_map = MinMaxScaler(feature_range=(0, 10))
-estimator = SVC(kernel="rbf") # classify
+feature_map = MinMaxScaler(feature_range=(0, 100))
+# feature_map = Normalizer()
+# estimator = SVC(kernel="linear", C=0.01) # classify
+estimator = SVC(kernel=additive_chi_square_kernel, C=0.01)
 clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", estimator)])
 # clf = estimator
 clf_precomputed = SVC(kernel="precomputed") # classify
@@ -111,8 +139,8 @@ clf_precomputed = SVC(kernel="precomputed") # classify
 # ucf101_stack_tvl1_folder = "/home/minhkv/datasets/feature/tvl1_flow_test"
 # input_folder_prefix = ucf101_stack_tvl1_folder
 # For demo
-# train_split_file_path = sample_train_file_path
-# test_split_file_path = sample_test_file_path
+train_split_file_path = sample_train_file_path
+test_split_file_path = sample_test_file_path
 # output_feature_folder = "/home/minhkv/feature/test"
 # classifier_name = "classifier_test"
 
@@ -122,7 +150,7 @@ Parameters for model.prototxt:
 - Testing: shuffle = False, mirror = False, use_temporal_jitter = False
 - Feature extraction: shuffle = False, mirror = False, use_temporal_jitter = None
 
-** If using video: use_image = False. Otherwise use_image = False
+** If using video: use_image = False. Otherwise use_image = True
 """
 # shuffle = True 
 # mirror = True

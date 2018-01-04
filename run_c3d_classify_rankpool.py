@@ -3,11 +3,10 @@ from RemoteControl import *
 import sys
 import os
 import copy
-
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+from Model.UCFSplitFile import *
+from Model.ClassifierForRankpool import *
+from Command.Classify import *
 
 train_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 

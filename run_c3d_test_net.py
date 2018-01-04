@@ -2,10 +2,12 @@ from __future__ import print_function
 from RemoteControl import *
 import sys
 import os
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+
+from Model.C3D import *
+from Model.UCFSplitFile import *
+from Command.CreateListPrefix import *
+from Command.TestNet import *
 
 c3d = C3D(
 	root_folder=config.c3d_root, 
@@ -14,7 +16,7 @@ c3d = C3D(
 	pre_trained=config.pretrained,
 	mean_file=config.mean_file,
 	use_image=True)
-c3d.generate_prototxt()
+
 
 test_file = UCFSplitFile(
 	config.test_file_line_syntax, 
@@ -49,7 +51,8 @@ createList = CreateListPrefix(
 	split_file=test_file,
 	output_feature_file=None
 	)
-createList.execute()
-
 test_net = TestNet(c3d)
-test_net.execute()
+
+# c3d.generate_prototxt()
+# createList.execute()
+# test_net.execute()

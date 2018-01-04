@@ -1,13 +1,5 @@
 from __future__ import print_function
 from Command import *
-import os
-import sys
-import copy
-sys.path.append("..")
-sys.path.append("../Model")
-from Video import *
-import config
-
 """
     Create List Prefix for extracting feature or finetuning or testing
     - Finetuning: provide split_file, input_folder

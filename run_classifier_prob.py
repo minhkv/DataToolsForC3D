@@ -4,10 +4,10 @@ import sys
 import os
 import copy
 
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+from Model.UCFSplitFile import *
+from Model.ClassifierUsingProb import *
+from Command.Classify import *
 
 train_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
@@ -53,4 +53,4 @@ classifier = ClassifierUsingProb(
 	)
 
 classify = Classify(classifier)
-classify.execute()
+# classify.execute()

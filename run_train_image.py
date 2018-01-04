@@ -2,15 +2,16 @@ from __future__ import print_function
 from RemoteControl import *
 import sys
 import os
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+
+from Model.C3D import *
+from Model.UCFSplitFile import *
+from Command.CreateListPrefix import *
 
 c3d = C3D(
 	root_folder=config.c3d_root, 
 	c3d_mode=C3D_Mode.TRAINING,
-	pre_trained=config.pre_trained,
+	pre_trained=config.pretrained,
 	mean_file=config.mean_file,
 	use_image=False)
 c3d.generate_prototxt()
@@ -38,9 +39,8 @@ train_file.count_frame()
 createList = CreateListPrefix(
 	split_file=train_file,
 	output_feature_file=train_file, 
-	use_image=False
 	)
-createList.execute()
+# createList.execute()
 
-finetune = Finetune(c3d)
-finetune.execute()
+# finetune = Finetune(c3d)
+# finetune.execute()

@@ -1,10 +1,8 @@
 from __future__ import print_function
 import config
 import sys
-sys.path.extend(["Model", "Command"])
-from module_model import *
-from module_command import *
-
+from Model.C3D import *
+from Model.UCFSplitFile import *
 
 c3d_feature_extraction_ucf101 = C3D(
 	root_folder=config.c3d_root, 

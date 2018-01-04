@@ -3,11 +3,13 @@ from RemoteControl import *
 import sys
 import os
 import copy
-sys.path.extend(["Model", "Command"])
 import config
-import instance
-from module_model import *
-from module_command import *
+
+from Model.C3D import *
+from Model.UCFSplitFile import *
+from Command.CreateListPrefix import *
+from Command.CreateFeatureFolder import *
+from Command.FeatureExtraction import *
 
 c3d = C3D(
 	root_folder=config.c3d_root, 
@@ -15,8 +17,7 @@ c3d = C3D(
 	model_config=config.model_config,
 	pre_trained=config.pretrained,
 	mean_file=config.mean_file,
-	use_image=True)
-c3d.generate_prototxt()
+	use_image=config.use_image)
 
 train_file = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
@@ -24,7 +25,7 @@ train_file = UCFSplitFile(
 	clip_size=16,
 	chunk_list_syntax=config.input_chunk_list_line_syntax,
 	chunk_list_file=config.input_chunk_file,
-	use_image=True,
+	use_image=config.use_image,
 	type_image="png")
 test_file = UCFSplitFile(
 	r"(?P<label>\w+)/(?P<name>.+)", 
@@ -32,7 +33,7 @@ test_file = UCFSplitFile(
 	clip_size=16,
 	chunk_list_syntax=config.input_chunk_list_line_syntax,
 	chunk_list_file=config.input_chunk_file,
-	use_image=True,
+	use_image=config.use_image,
 	type_image="png")
 out_file = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
@@ -40,7 +41,7 @@ out_file = UCFSplitFile(
 	clip_size=16,
 	chunk_list_syntax=config.output_chunk_list_line_syntax,
 	chunk_list_file=config.output_chunk_file,
-	use_image=True,
+	use_image=config.use_image,
 	type_image="png")
 
 train_file.load_name_and_label()
@@ -52,7 +53,7 @@ print("Loaded: {} label".format(len(train_file.name)))
 
 def add_input_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
-	return os.path.join(config.input_folder_prefix, name)
+	return os.path.join(config.input_folder_prefix, name + '.avi')
 def add_out_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
 	return os.path.join(config.output_feature_folder, "bin", os.path.basename(video_name))
@@ -76,6 +77,7 @@ createList = CreateListPrefix(
 create_output_folder = CreateFeatureFolder(out_file)
 feature_extraction = FeatureExtraction(c3d)
 
-createList.execute()
-create_output_folder.execute()
-feature_extraction.execute()
+# c3d.generate_prototxt()
+# createList.execute()
+# create_output_folder.execute()
+# feature_extraction.execute()

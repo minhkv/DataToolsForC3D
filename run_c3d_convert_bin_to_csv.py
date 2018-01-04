@@ -3,14 +3,10 @@ from RemoteControl import *
 import sys
 import os
 import copy
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
-import instance
-
-c3d = instance.c3d_feature_extraction_ucf101
-c3d.generate_prototxt()
+from Model.UCFSplitFile import *
+from Command.CreateFeatureFolder import *
+from Command.ConvertBinToCSV import *
 
 all_ucf101 = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
@@ -42,7 +38,7 @@ all_ucf101.preprocess_label(dummy_label)
 out_file.preprocess_name(add_out_folder_prefix)
 
 create_output_folder = CreateFeatureFolder(out_file)
-create_output_folder.execute()
-
 convert_bin_feature_to_csv = ConvertBinToCSV(all_ucf101, out_file, config.layer)
-convert_bin_feature_to_csv.execute()
+
+# create_output_folder.execute()
+# convert_bin_feature_to_csv.execute()

@@ -16,9 +16,15 @@ output_report = 'analyse_{}.txt'.format(config.classifier_name)
 output_file = os.path.join(report_folder, output_report)
 
 
-classInd = UCFSplitFile(
-    r"(?P<label>.+) (?P<name>\w+)", 
-    config.classInd_file_path)
+# classInd = UCFSplitFile(
+#     r"(?P<label>.+) (?P<name>\w+)", 
+#     config.classInd_file_path)
+classInd = MICASplitFile(
+	r"(?P<label>.+) (?P<name>.+)",
+    config.classInd_file_path
+	# path='/home/minhkv/datasets/Kinect_vis_annotate/v4/classInd.txt'
+)
+
 classInd.load_name_and_label()
 
 with open(y_pred_file, 'r') as pred, \

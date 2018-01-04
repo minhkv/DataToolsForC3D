@@ -4,12 +4,11 @@ import sys
 import os
 import copy
 import numpy as np
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+from Model.UCFSplitFile import *
+from Model.ClassifierUsingProb import *
+from Command.Classify import *
 import instance
-
 
 def add_input_rgb_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
@@ -85,7 +84,7 @@ classifier_flow = ClassifierUsingProb(
 	)
 
 classify = Classify(classifier_flow, classifier_rgb, fuse_function)
-classify.execute()
+# classify.execute()
 
 # classify_flow = Classify(classifier_flow)
 # classify_flow.execute()

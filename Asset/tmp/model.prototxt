@@ -6,16 +6,16 @@ layers {
   top: "label"
   image_data_param {
     source: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/input.txt"
-    use_image: true
-    mean_file: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/mean_opt_flow_split_1.binaryproto"
-    batch_size: 30
+    use_image: false
+    mean_file: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/mean_mica_split.binaryproto"
+    batch_size: 20
     crop_size: 112
-    mirror: false
+    mirror: true
     show_data: 0
     new_height: 128
     new_width: 171
     new_length: 16
-    shuffle: false
+    shuffle: true
   }
 }
 # ----------- 1st layer group ---------------
@@ -341,16 +341,9 @@ layers {
   }
 }
 layers {
-  name: "prob"
-  type: SOFTMAX
+  name: "loss"
+  type: SOFTMAX_LOSS
   bottom: "fc8"
-  top: "prob"
-}
-layers {
-  top: "accuracy"
-  name: "accuracy"
-  type: ACCURACY
-  bottom: "prob"
   bottom: "label"
 }
 

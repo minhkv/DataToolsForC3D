@@ -2,10 +2,9 @@ from __future__ import print_function
 from RemoteControl import *
 import sys
 import os
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+from Model.C3D import *
+from Command.DrawLearningCurve import *
 
 log_files = [
     "train_split_3.log"

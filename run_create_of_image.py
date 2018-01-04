@@ -3,11 +3,12 @@ from RemoteControl import *
 import sys
 import os
 import copy
-sys.path.extend(["Model", "Command"])
 import config
 import instance
-from module_model import *
-from module_command import *
+from Command.CreateFeatureFolder import *
+from Command.CreateOFImage import *
+from Command.TestOFImage import *
+
 
 c3d = instance.c3d_feature_extraction_ucf101
 c3d.generate_prototxt()
@@ -60,5 +61,5 @@ create_of_image = CreateOFImage(u_file, v_file, out_file)
 test_of = TestOFImage(u_file, v_file, out_file)
 
 # create_output_folder.execute()
-create_of_image.execute()
-test_of.execute()
+# create_of_image.execute()
+# test_of.execute()

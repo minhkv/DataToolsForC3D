@@ -14,5 +14,5 @@ class ClassifierForRankpool(Classifier):
         feature_fow = feature[:4096]
         feature_rev = feature[-2 * 4096:-4096]
         feature = np.concatenate((feature_fow, feature_rev))
-        feature = abs(feature)        
+        # feature = abs(feature)        
         return feature

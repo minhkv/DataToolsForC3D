@@ -2,10 +2,11 @@ from __future__ import print_function
 from RemoteControl import *
 import sys
 import os
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+from Model.C3D import *
+from Model.UCFSplitFile import *
+from Command.Finetune import *
+from Command.CreateListPrefix import *
 
 c3d = C3D(
 	root_folder=config.c3d_root, 
@@ -13,11 +14,12 @@ c3d = C3D(
 	pre_trained=config.pre_trained_sport1m,
 	mean_file=config.mean_file,
 	use_image=False)
-c3d.generate_prototxt()
 
 train_file = UCFSplitFile(
 	r"(?P<name>.+) (?P<label>\w+)", 
 	config.train_split_file_path,
+	chunk_list_syntax=config.input_chunk_list_line_syntax,
+	chunk_list_file=config.input_chunk_file,
 	use_image=False)
 
 
@@ -37,10 +39,10 @@ train_file.count_frame()
 
 createList = CreateListPrefix(
 	split_file=train_file,
-	output_feature_file=train_file, 
-	use_image=False
+	output_feature_file=None, 
 	)
-createList.execute()
-
 finetune = Finetune(c3d)
-finetune.execute()
+
+# c3d.generate_prototxt()
+# createList.execute()
+# finetune.execute()

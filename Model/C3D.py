@@ -94,6 +94,7 @@ class C3D:
         batch_size = 30
         num_batch_size = self.count_line(self.input_prefix) / batch_size + 1
         layers = ['prob', 'fc8', 'fc7', 'fc6']
+        # layers = ['fc6-1']
         cmd = [
             "GLOG_logtostderr=1",
             feature_extraction_bin,
@@ -143,7 +144,6 @@ class C3D:
             print("[Error] Cannot read file: {}".format(path))
             sys.exit(-6)
     def test_net(self):
-        """Not available yet"""
         batch_size = 30
         num_batch = self.count_line(self.input_prefix) / batch_size
         gpu_id = 0

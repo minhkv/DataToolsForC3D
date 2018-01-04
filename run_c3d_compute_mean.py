@@ -2,10 +2,13 @@ from __future__ import print_function
 from RemoteControl import *
 import sys
 import os
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
+
+from Model.C3D import *
+from Model.UCFSplitFile import *
+from Command.ComputeVolumeMean import *
+from Command.Train import *
+from Command.CreateListPrefix import *
 
 c3d = C3D(
 	root_folder=config.c3d_root, 

@@ -3,7 +3,8 @@ import re
 import os
 import glob
 from Video import *
-class UCFSplitFile: 
+from SplitFile import *
+class UCFSplitFile(SplitFile): 
     """"""
     def __init__(
         self, 
@@ -63,29 +64,29 @@ class UCFSplitFile:
                 video = Video(vid)
                 num_fr, fps = video.get_frame_count()
                 self.num_frames.append(num_fr)
-    def create_chunk_list(self):
-        print("[Info] Create chunk list")
-        start_frame = []
-        start = 0
-        if self.use_image:
-            start = 1
-        for num_frame in self.num_frames:
-            start_frame.append(range(start, num_frame - self.clip_size, self.clip_size))
-        for i, name_item in enumerate(self.name):
-            for num_frame in start_frame[i]:
-                self.chunk_list.append([name_item, num_frame, self.label[i]])
+    # def create_chunk_list(self):
+    #     print("[Info] Create chunk list")
+    #     start_frame = []
+    #     start = 0
+    #     if self.use_image:
+    #         start = 1
+    #     for num_frame in self.num_frames:
+    #         start_frame.append(range(start, num_frame - self.clip_size, 4))#self.clip_size))
+    #     for i, name_item in enumerate(self.name):
+    #         for num_frame in start_frame[i]:
+    #             self.chunk_list.append([name_item, num_frame, self.label[i]])
         
-    def write_chunk_list_to_file(self):
-        print("[Info] Write to chunk_file: {}".format(self.chunk_list_file))
-        with open(self.chunk_list_file, "w") as fp:
-            for args in self.chunk_list:
-                line = self.chunk_list_syntax.format(*args)
-                fp.write(line)
-    def preprocess_name(self, process):
-        self.name = [process(n) for n in self.name]
-    def preprocess_label(self, process):
-        self.label = [process(lb) for lb in self.label]
-    def convert_name_to_label(self, name):
-        return self.map_name_to_label[name]
-    def convert_label_to_name(self, label):
-        return self.map_label_to_name[label]
+    # def write_chunk_list_to_file(self):
+    #     print("[Info] Write to chunk_file: {}".format(self.chunk_list_file))
+    #     with open(self.chunk_list_file, "w") as fp:
+    #         for args in self.chunk_list:
+    #             line = self.chunk_list_syntax.format(*args)
+    #             fp.write(line)
+    # def preprocess_name(self, process):
+    #     self.name = [process(n) for n in self.name]
+    # def preprocess_label(self, process):
+    #     self.label = [process(lb) for lb in self.label]
+    # def convert_name_to_label(self, name):
+    #     return self.map_name_to_label[name]
+    # def convert_label_to_name(self, label):
+    #     return self.map_label_to_name[label]

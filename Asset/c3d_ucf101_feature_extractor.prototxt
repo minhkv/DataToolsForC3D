@@ -14,7 +14,7 @@ layers {{
     show_data: 0
     new_height: 128
     new_width: 171
-    new_length: 60
+    new_length: 16
     shuffle: false
   }}
 }}

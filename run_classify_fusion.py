@@ -4,11 +4,10 @@ import sys
 import os
 import copy
 import numpy as np
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
-
+from Model.UCFSplitFile import *
+from Model.Classifier import *
+from Command.Classify import *
 
 def add_input_rgb_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]

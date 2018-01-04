@@ -7,6 +7,7 @@ import sys
 import array
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, classification_report
 from sklearn.preprocessing import MinMaxScaler
+import pickle
 class Classifier:
     def __init__(
         self, 
@@ -63,13 +64,16 @@ class Classifier:
         return feature
 
     def get_list_feature_in_folder(self, path, layer):
-        print("[Load] Loading: {}".format(path))
+        
         listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         return listfiles
 
     def combine_list_feature(self, list_feature):
         features = [self.read_feature_file(csv_file) for csv_file in list_feature]
         feature = np.mean(features, axis=0)
+        print("[Combine] Folder: {}".format(os.path.dirname(list_feature[0])))
+        print("[Combine] List features shape: {}".format(np.array(features).shape))
+        print("[Combine] Feature combined shape: {}".format(np.array(feature).shape))
         return feature
 
     def load_feature_from_folder_and_average(self, split_file):
@@ -78,11 +82,13 @@ class Classifier:
         try:
             for feature_folder, label in zip(split_file.name, split_file.label):
                 # print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
+                print("[Load] Loading: {} {}".format(feature_folder, label))
                 list_feature = self.get_list_feature_in_folder(feature_folder, self.layer)
                 if len(list_feature) == 0:
-                    class_name = self.class_ind.convert_label_to_name(str(label + 1))
-                    input_name = os.path.basename(feature_folder) + ".avi"
-                    self.empty_folder.append(os.path.join(class_name, input_name))
+                    # class_name = self.class_ind.convert_label_to_name(str(label + 1))
+                    # input_name = os.path.basename(feature_folder) + ".avi"
+                    # self.empty_folder.append(os.path.join(class_name, input_name))
+                    self.empty_folder.append(feature_folder)
                     continue
                 self.test_name.append(feature_folder)
                 features = self.combine_list_feature(list_feature)
@@ -113,8 +119,8 @@ class Classifier:
             raise ValueError("2 train_input not have same length")
         if fuse_func != None:
             self.train_input = [fuse_func(input1, input2) for input1, input2 in zip(self.train_input, clf.train_input)]
-        # else:
-
+            self.test_input = [fuse_func(input1, input2) for input1, input2 in zip(self.test_input, clf.test_input)]
+        
 
     def training(self):
         print("[Info] Training classifier {} ".format(self.name))
@@ -127,6 +133,15 @@ class Classifier:
             y_pred=self.test_pred, 
             labels=range(len(self.class_ind.label))
             )
+        print(' '.join(self.class_ind.label))
+        t = (set(self.test_label))
+        print (t)
+        p = (set(self.test_pred))
+        print (p)
+    def save_classifier(self):
+        pickle.dump(self.classifier, self.name + ".pkl")
+    def save_output(self):
+        pass
     def create_report(self):
         print("[Info] Creating report for classifier")
         report = classification_report(
