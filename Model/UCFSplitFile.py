@@ -63,7 +63,9 @@ class UCFSplitFile(SplitFile):
             for vid in self.name:
                 video = Video(vid)
                 num_fr, fps = video.get_frame_count()
+                
                 self.num_frames.append(num_fr)
+                print("[Count frame] {}: {}".format(vid, num_fr))
     # def create_chunk_list(self):
     #     print("[Info] Create chunk list")
     #     start_frame = []

@@ -1,4 +1,4 @@
-train_net: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/model.prototxt"
+train_net: "{0}"
 # test_net: "we don't use testing on the fly"
 test_iter: 100
 test_interval: 0
@@ -18,4 +18,3 @@ snapshot_prefix: "/home/minhkv/pre-trained/hmdb51/c3d_hmdb51_finetune"
 # solver mode: CPU or GPU
 solver_mode: GPU
 device_id: 0
-

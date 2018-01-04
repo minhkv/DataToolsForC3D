@@ -1,14 +1,12 @@
 from __future__ import print_function
-from RemoteControl import *
 import sys
 import os
 import copy
 import numpy as np
-sys.path.extend(["Model", "Command"])
 import config
-from module_model import *
-from module_command import *
 import instance
+from Model.MICASplitFile import *
+from Model.UCFSplitFile import *
 
 def convert_label_to_int(label):
     label = label.replace('\xef\xbb\xbf', '')
