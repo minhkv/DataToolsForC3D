@@ -3,15 +3,12 @@ from RemoteControl import *
 import sys
 import os
 import copy
-import config
 import instance
+import config_c3d
 from Command.CreateFeatureFolder import *
 from Command.CreateOFImage import *
 from Command.TestOFImage import *
 
-
-c3d = instance.c3d_feature_extraction_ucf101
-c3d.generate_prototxt()
 
 train_file = instance.train_file
 test_file = instance.test_file
@@ -35,14 +32,14 @@ def replace_wrong_name(name):
 def add_u_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
 	name = replace_wrong_name(name)
-	return os.path.join(config.ucf101_tvl1_flow_folder, 'u', name)
+	return os.path.join(config_c3d.input_folder_prefix, 'u', name)
 def add_v_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
 	name = replace_wrong_name(name)
-	return os.path.join(config.ucf101_tvl1_flow_folder, 'v', name)
+	return os.path.join(config_c3d.input_folder_prefix, 'v', name)
 def add_out_folder_prefix(path):
 	video_name = os.path.splitext(path)[0]
-	return os.path.join(config.ucf101_stack_tvl1_folder, os.path.basename(video_name))
+	return os.path.join(config_c3d.output_feature_folder, os.path.basename(video_name))
 def subtract_label(label):
 	return int(label) - 1
 def dummy_label(label):
@@ -54,12 +51,14 @@ v_file.preprocess_name(add_v_folder_prefix)
 
 out_file.concatenate(train_file)
 out_file.preprocess_name(add_out_folder_prefix)
-
+print(u_file.name[0])
+print(v_file.name[0])
+print(out_file.name[0])
 
 create_output_folder = CreateFeatureFolder(out_file)
 create_of_image = CreateOFImage(u_file, v_file, out_file)
 test_of = TestOFImage(u_file, v_file, out_file)
 
-# create_output_folder.execute()
-# create_of_image.execute()
-# test_of.execute()
+create_output_folder.execute()
+create_of_image.execute()
+test_of.execute()

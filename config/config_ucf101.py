@@ -5,9 +5,6 @@ model_test_ucf101 = os.path.join(asset_path, "conv3d_ucf101_test.prototxt")
 model_train_ucf101 = os.path.join(asset_path, "conv3d_ucf101_train.prototxt")
 model_feature_extractor_ucf101 = os.path.join(asset_path, "conv3d_ucf101_feature_extractor.prototxt")
 
-train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
-test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
-classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
 
 train_split_1_file_path = os.path.join(asset_path, "trainlist01.txt")
 test_split_1_file_path = os.path.join(asset_path, "test_list01.txt")

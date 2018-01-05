@@ -9,9 +9,9 @@ type_image = "png" # training, finetune
 input_folder_prefix = data_path # for training, finetune, test, feature extract
 type_feature_file = "bin" # for classify
 pretrained = pretrained_model # for feature extract, finetune, test
-model_config = model_train # feature extract, train, test, finetune
+model_config = model_feature_extract # feature extract, train, test, finetune
 solver_config = solver # train, finetune
-layer = "prob" # for convert and classify 
+layer = "fc6" # for convert and classify 
 mean_file = mean_split # feature extract, finetune, test
 output_feature_folder = feature_folder_split # for feature extract, classify, convert
 
@@ -25,8 +25,8 @@ if len(sys.argv) > 1:
 
 feature_map = MinMaxScaler(feature_range=(0, 100))
 # feature_map = Normalizer()
-# estimator = SVC(kernel="linear", C=0.01) # classify
-estimator = SVC(kernel=additive_chi_square_kernel, C=0.01)
+estimator = SVC(kernel="linear", C=1) # classify
+# estimator = SVC(kernel=additive_chi_square_kernel, C=0.01)
 clf = pipeline.Pipeline([("feature_map", feature_map), ("svm", estimator)])
 # clf = estimator
 clf_precomputed = SVC(kernel="precomputed") # classify

@@ -17,6 +17,10 @@ c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
 input_chunk_list_line_syntax = "{0} {1} {2}\n"
 output_chunk_list_line_syntax = "{0}/{1:06d}\n"
 
+train_file_line_syntax = r"(?P<name>.+) (?P<label>\w+)"
+test_file_line_syntax = r"(?P<label>.+)/(?P<name>.+)"
+classInd_file_line_syntax = r"(?P<label>.+) (?P<name>\w+)"
+
 input_chunk_file = os.path.join(temp, "input.txt")
 output_chunk_file = os.path.join(temp, "output.txt")
 

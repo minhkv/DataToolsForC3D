@@ -23,6 +23,12 @@ import os, re
         - Line syntax:
             <class_name>/<video_name> <label>
 """
+"""
+    HMDB51 flow folder:
+        flow/
+            <video_1>.avi
+            ...
+"""
 hmdb51_annotation = "/home/minhkv/datasets_old/hmdb51/testTrainMulti_7030_splits"
 hmdb51_video_path = "/home/minhkv/datasets_old/hmdb51/data"
 hmdb51_split_path = "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/hmdb51_split"
