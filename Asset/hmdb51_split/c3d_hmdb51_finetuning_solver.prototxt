@@ -7,14 +7,14 @@ momentum: 0.9
 weight_decay: 0.0005
 lr_policy: "step"
 gamma: 0.1
-stepsize: 400
+stepsize: 2000
 # Display every 20 iterations
 display: 20
 # The maximum number of iterations
-max_iter: 4000
+max_iter: 20000
 # snapshot intermediate results
-snapshot: 400
-snapshot_prefix: "/home/minhkv/pre-trained/hmdb51/c3d_hmdb51_finetune"
+snapshot: 2000
+snapshot_prefix: "/home/minhkv/pre-trained/hmdb51/c3d_hmdb51_finetune_flow"
 # solver mode: CPU or GPU
 solver_mode: GPU
 device_id: 0

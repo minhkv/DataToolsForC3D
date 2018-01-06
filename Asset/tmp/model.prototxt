@@ -1,4 +1,4 @@
-name: "HMDB51_feature_extractor"
+name: "deep_c3d_hmdb51_train"
 layers {
   name: "data"
   type: VIDEO_DATA
@@ -6,16 +6,16 @@ layers {
   top: "label"
   image_data_param {
     source: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/input.txt"
-    use_image: false
-    mean_file: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/mean_hmdb51_split_1.binaryproto"
+    use_image: true
+    mean_file: "/home/minhkv/script/Run_C3D/DataToolsForC3D/Asset/tmp/mean_hmdb51_flow_split_1.binaryproto"
     batch_size: 30
     crop_size: 112
-    mirror: false
+    mirror: true
     show_data: 0
     new_height: 128
     new_width: 171
     new_length: 16
-    shuffle: false
+    shuffle: true
   }
 }
 # ----------- 1st layer group ---------------
@@ -34,6 +34,7 @@ layers {
     kernel_depth: 3
     pad: 1
     temporal_pad: 1
+    stride: 1
     weight_filler {
       type: "gaussian"
       std: 0.01
@@ -141,40 +142,9 @@ layers {
   top: "conv3a"
 }
 layers {
-  name: "conv3b"
-  type: CONVOLUTION3D
-  bottom: "conv3a"
-  top: "conv3b"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
-  convolution_param {
-    num_output: 256
-    kernel_size: 3
-    kernel_depth: 3
-    pad: 1
-    temporal_pad: 1
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 1
-    }
-  }
-}
-layers {
-  name: "relu3b"
-  type: RELU
-  bottom: "conv3b"
-  top: "conv3b"
-}
-layers {
   name: "pool3"
   type: POOLING3D
-  bottom: "conv3b"
+  bottom: "conv3a"
   top: "pool3"
   pooling_param {
     pool: MAX
@@ -196,7 +166,7 @@ layers {
   weight_decay: 1
   weight_decay: 0
   convolution_param {
-    num_output: 512
+    num_output: 256
     kernel_size: 3
     kernel_depth: 3
     pad: 1
@@ -218,40 +188,9 @@ layers {
   top: "conv4a"
 }
 layers {
-  name: "conv4b"
-  type: CONVOLUTION3D
-  bottom: "conv4a"
-  top: "conv4b"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
-  convolution_param {
-    num_output: 512
-    kernel_size: 3
-    kernel_depth: 3
-    pad: 1
-    temporal_pad: 1
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 1
-    }
-  }
-}
-layers {
-  name: "relu4b"
-  type: RELU
-  bottom: "conv4b"
-  top: "conv4b"
-}
-layers {
   name: "pool4"
   type: POOLING3D
-  bottom: "conv4b"
+  bottom: "conv4a"
   top: "pool4"
   pooling_param {
     pool: MAX
@@ -273,7 +212,7 @@ layers {
   weight_decay: 1
   weight_decay: 0
   convolution_param {
-    num_output: 512
+    num_output: 256
     kernel_size: 3
     kernel_depth: 3
     pad: 1
@@ -295,41 +234,9 @@ layers {
   top: "conv5a"
 }
 layers {
-  name: "conv5b"
-  type: CONVOLUTION3D
-  bottom: "conv5a"
-  top: "conv5b"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
-  convolution_param {
-    num_output: 512
-    kernel_size: 3
-    kernel_depth: 3
-    pad: 1
-    temporal_pad: 1
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 1
-    }
-  }
-}
-layers {
-  name: "relu5b"
-  type: RELU
-  bottom: "conv5b"
-  top: "conv5b"
-}
-
-layers {
   name: "pool5"
   type: POOLING3D
-  bottom: "conv5b"
+  bottom: "conv5a"
   top: "pool5"
   pooling_param {
     pool: MAX
@@ -341,16 +248,16 @@ layers {
 }
 # ---------------- fc layers -------------
 layers {
-  name: "fc6"
+  name: "fc6-1"
   type: INNER_PRODUCT
   bottom: "pool5"
-  top: "fc6"
+  top: "fc6-1"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 4096
+    num_output: 2048
     weight_filler {
       type: "gaussian"
       std: 0.005
@@ -364,31 +271,31 @@ layers {
 layers {
   name: "relu6"
   type: RELU
-  bottom: "fc6"
-  top: "fc6"
+  bottom: "fc6-1"
+  top: "fc6-1"
 }
 layers {
   name: "drop6"
   type: DROPOUT
-  bottom: "fc6"
-  top: "fc6"
+  bottom: "fc6-1"
+  top: "fc6-1"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
 layers {
-  name: "fc7"
+  name: "fc7-1"
   type: INNER_PRODUCT
-  bottom: "fc6"
-  top: "fc7"
+  bottom: "fc6-1"
+  top: "fc7-1"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 4096
+    num_output: 2048
     weight_filler {
-    type: "gaussian"
+      type: "gaussian"
       std: 0.005
     }
     bias_filler {
@@ -400,23 +307,23 @@ layers {
 layers {
   name: "relu7"
   type: RELU
-  bottom: "fc7"
-  top: "fc7"
+  bottom: "fc7-1"
+  top: "fc7-1"
 }
 layers {
   name: "drop7"
   type: DROPOUT
-  bottom: "fc7"
-  top: "fc7"
+  bottom: "fc7-1"
+  top: "fc7-1"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
 layers {
-  name: "fc8"
+  name: "fc8-1"
   type: INNER_PRODUCT
-  bottom: "fc7"
-  top: "fc8"
+  bottom: "fc7-1"
+  top: "fc8-1"
   blobs_lr: 1
   blobs_lr: 2
   weight_decay: 1
@@ -434,17 +341,9 @@ layers {
   }
 }
 layers {
-  name: "prob"
-  type: SOFTMAX
-  bottom: "fc8"
-  top: "prob"
-}
-layers {
-  name: "accuracy"
-  type: ACCURACY
-  bottom: "prob"
+  name: "loss"
+  type: SOFTMAX_LOSS
+  bottom: "fc8-1"
   bottom: "label"
-  top: "accuracy"
-  #top: "prediction_truth"
 }
 

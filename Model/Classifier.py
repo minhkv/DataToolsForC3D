@@ -65,7 +65,8 @@ class Classifier:
 
     def get_list_feature_in_folder(self, path, layer):
         
-        listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
+        # listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
+        listfiles = sorted([os.path.join(path, f) for f in os.listdir(path) if layer in f])
         return listfiles
 
     def combine_list_feature(self, list_feature):

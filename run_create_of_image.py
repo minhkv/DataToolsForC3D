@@ -5,13 +5,24 @@ import os
 import copy
 import instance
 import config_c3d
+from Model.UCFSplitFile import *
 from Command.CreateFeatureFolder import *
 from Command.CreateOFImage import *
 from Command.TestOFImage import *
 
 
-train_file = instance.train_file
-test_file = instance.test_file
+train_file = UCFSplitFile(
+	r"(?P<name>.+)", 
+	config_c3d.train_split_file_path,
+	clip_size=16,
+	use_image=False)
+
+test_file = UCFSplitFile(
+	r"(?P<label>\w+)/(?P<name>.+)", 
+	config_c3d.test_split_file_path,
+	clip_size=16,
+	use_image=False)
+
 out_file = copy.copy(instance.out_file_empty)
 u_file = copy.copy(instance.out_file_empty)
 v_file = copy.copy(instance.out_file_empty)
@@ -59,6 +70,6 @@ create_output_folder = CreateFeatureFolder(out_file)
 create_of_image = CreateOFImage(u_file, v_file, out_file)
 test_of = TestOFImage(u_file, v_file, out_file)
 
-create_output_folder.execute()
-create_of_image.execute()
+# create_output_folder.execute()
+# create_of_image.execute()
 test_of.execute()

@@ -12,10 +12,10 @@ from Command.TestNet import *
 c3d = C3D(
 	root_folder=config_c3d.c3d_root, 
 	c3d_mode=C3D_Mode.TEST_FINE_TUNED_NET,
-	model_config=config_c3d.model_config,
+	model_config=config_c3d.model_test,
 	pre_trained=config_c3d.pretrained,
 	mean_file=config_c3d.mean_file,
-	use_image=False)
+	use_image=config_c3d.use_image)
 
 
 test_file = UCFSplitFile(
@@ -24,7 +24,7 @@ test_file = UCFSplitFile(
 	clip_size=16,
 	chunk_list_syntax=config_c3d.input_chunk_list_line_syntax,
 	chunk_list_file=config_c3d.input_chunk_file,
-	use_image=False)
+	use_image=config_c3d.use_image)
 test_file.load_name_and_label()
 print("Loaded: {} label".format(len(test_file.name)))
 
@@ -34,8 +34,8 @@ classInd = UCFSplitFile(
 classInd.load_name_and_label()
 
 def add_input_folder_prefix(path):
-	# name = os.path.basename(path).split('.')[0]
-	name = path
+	name = os.path.basename(path).split('.')[0]
+	# name = path
 	return os.path.join(config_c3d.input_folder_prefix, name)
 def subtract_label(label):
 	return int(label) - 1
