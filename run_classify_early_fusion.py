@@ -8,7 +8,8 @@ from config.config_mica import *
 from Model.UCFSplitFile import *
 from Model.MICASplitFile import *
 from Model.ClassifierUsingProb import *
-from Command.Classify import *
+from Command.ClassifyEarlyFusion import *
+from Command.VisualizeEarlyFusion import *
 import instance
 
 def add_input_rgb_folder_prefix(path):
@@ -35,6 +36,17 @@ def append_order_to_mica_split_file(split_file):
 def convert_label_to_int_and_subtract(label):
 	label = label.replace('\xef\xbb\xbf', '')
 	return int(label) - 1
+def concatenate_l2_norm(vect1, vect2):
+	norm_vect1 = np.linalg.norm(vect1)
+	norm_vect2 = np.linalg.norm(vect2)
+	vect1_unit = vect1
+	vect2_unit = vect2
+	if norm_vect1 != 0:
+		vect1_unit = vect1 / float(np.linalg.norm(vect1))
+	if norm_vect2 != 0:
+		vect2_unit = vect2 / float(np.linalg.norm(vect2))
+	fused_vec = np.concatenate((np.array(vect1_unit), np.array(vect2_unit)))
+	return fused_vec
 
 train_file = MICASplitFile(
 	mica_split_syntax, 
@@ -64,15 +76,15 @@ train_file_flow = copy.copy(train_file)
 test_file_flow = copy.copy(test_file)
 
 #rgb
-# train_file.preprocess_name(add_input_rgb_folder_prefix)
-# train_file.preprocess_label(subtract_label)
+train_file.preprocess_name(add_input_rgb_folder_prefix)
+train_file.preprocess_label(convert_label_to_int_and_subtract)
 
 test_file.preprocess_name(add_input_rgb_folder_prefix)
 test_file.preprocess_label(convert_label_to_int_and_subtract)
 
 #flow
-# train_file_flow.preprocess_name(add_input_flow_folder_prefix)
-# train_file_flow.preprocess_label(subtract_label)
+train_file_flow.preprocess_name(add_input_flow_folder_prefix)
+train_file_flow.preprocess_label(convert_label_to_int_and_subtract)
 
 test_file_flow.preprocess_name(add_input_flow_folder_prefix)
 test_file_flow.preprocess_label(convert_label_to_int_and_subtract)
@@ -84,8 +96,8 @@ test_file.name = append_order_to_mica_split_file(test_file)
 train_file_flow.name = append_order_to_mica_split_file(train_file_flow)
 test_file_flow.name = append_order_to_mica_split_file(test_file_flow)
 
-classifier_rgb = ClassifierUsingProb(
-	train_file=instance.out_file_empty, 
+classifier_rgb = Classifier(
+	train_file=train_file, 
 	test_file=test_file, 
 	class_ind=classInd, 
 	classifier=config_c3d.clf,
@@ -93,8 +105,8 @@ classifier_rgb = ClassifierUsingProb(
 	layer=config_c3d.layer,
 	type_feature_file=config_c3d.type_feature_file
 	)
-classifier_flow = ClassifierUsingProb(
-	train_file=instance.out_file_empty, 
+classifier_flow = Classifier(
+	train_file=train_file_flow, 
 	test_file=test_file_flow, 
 	class_ind=classInd, 
 	classifier=config_c3d.clf,
@@ -103,7 +115,8 @@ classifier_flow = ClassifierUsingProb(
 	type_feature_file=config_c3d.type_feature_file
 	)
 
-classify = Classify(classifier_rgb, classifier_flow, fuse_function)
+# classify = ClassifyEarlyFusion(classifier_rgb, classifier_flow, concatenate_l2_norm) # early 
+classify = VisualizeEarlyFusion(classifier_rgb, classifier_flow, concatenate_l2_norm) # early 
 classify.execute()
 
 # classify_flow = Classify(classifier_flow)

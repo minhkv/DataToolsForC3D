@@ -36,9 +36,9 @@ class UCFSplitFile(SplitFile):
                     m = re.compile(self.syntax)
                     d = m.search(line).groupdict()
                     if d.has_key('name'):
-                        self.name.append(d['name'])
+                        self.name.append(d['name'].strip())
                     if d.has_key('label'):
-                        self.label.append(d['label'])  
+                        self.label.append(d['label'].strip())  
                 self.map_label_to_name = dict(zip(self.label, self.name))
                 self.map_name_to_label = dict(zip(self.name, self.label))
         except IOError as ex:

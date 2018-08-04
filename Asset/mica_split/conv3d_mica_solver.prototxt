@@ -1,4 +1,4 @@
-train_net: "/home/minhkv/script/MICA_C3D/DataToolsForC3D/Asset/tmp/model.prototxt"
+train_net: "{0}"
 # test_net: "conv3d_ucf101_test.prototxt"
 test_iter: 100
 test_interval: 0
@@ -18,4 +18,3 @@ snapshot_prefix: "/home/minhkv/pre-trained/mica/merged_flow/conv3d_mica_flow_tra
 # solver mode: CPU or GPU
 solver_mode: GPU
 device_id: 0
-

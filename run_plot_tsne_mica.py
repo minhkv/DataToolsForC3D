@@ -2,18 +2,19 @@ from __future__ import print_function
 import sys
 import os
 import copy
+
 import config_c3d
+# from config.config_hmdb51 import *
 from config.config_mica import *
-import instance
 from Model.UCFSplitFile import *
 from Model.MICASplitFile import *
-from Model.ClassifierForRankpool import *
+from Model.ClassifierUsingProb import *
 from Command.Classify import *
-from utils_c3d import convert_leaf_to_group, convert_leaf_to_root
+from Command.VisualizeFeature import *
 
 def add_output_folder_prefix(path):
 	name = os.path.basename(path).split('.')[0]
-	name = os.path.join(rgb_feature_folder, config_c3d.type_feature_file, name)
+	name = os.path.join(flow_feature_folder, config_c3d.type_feature_file, name)
 	return name
 def convert_label_to_int_and_subtract(label):
 	label = label.replace('\xef\xbb\xbf', '')
@@ -25,7 +26,6 @@ def append_order_to_mica_split_file(split_file):
 		new_name.append(os.path.join(name, str(int(order))))
 	return new_name
 def check_empty(list_path):
-
 	for path in list_path:
 		if os.path.exists(path):
 			l = os.listdir(path)
@@ -80,9 +80,6 @@ test_file.preprocess_label(convert_label_to_int_and_subtract)
 
 train_file.name = append_order_to_mica_split_file(train_file)
 test_file.name = append_order_to_mica_split_file(test_file)
-check_empty(train_file.name)
-check_empty(test_file.name)
-# print('\n'.join(train_file.name))
 
 classifier = Classifier(
 	train_file=train_file, 
@@ -94,21 +91,5 @@ classifier = Classifier(
 	type_feature_file=config_c3d.type_feature_file
 	)
 
-classify = Classify(classifier)
-
-st = set(train_file.label)
-stest = set(test_file.label)
-print(st)
-print (stest)
-# classify.execute()
-# print(train_file.segment_order[0])
-
-def mapping_to_person(name):
-	return mapping.convert_name_to_label(os.path.basename(os.path.dirname(name)))
-classifier.load_train_test_split()
-classifier.training()
-classifier.testing()
-classifier.create_report()
-# classifier.train_file.preprocess_name(mapping_to_person)
-# classifier.test_file.preprocess_name(mapping_to_person)
-classifier.save_output()
+plot_tsne = VisualizeFeature(classifier)
+plot_tsne.execute()

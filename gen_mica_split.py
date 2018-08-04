@@ -57,5 +57,5 @@ def write_split_to_file_from_annotation(list_annotation, file):
                 i += 1
             fp.write(''.join(lines))
         
-write_split_to_file_from_annotation(train_annotation, os.path.join(config.asset_path, 'mica_train.txt'))
-write_split_to_file_from_annotation(test_annotation, os.path.join(config.asset_path, 'mica_test.txt'))
+write_split_to_file_from_annotation(train_annotation, os.path.join(config_c3d.asset_path, 'mica_train.txt'))
+write_split_to_file_from_annotation(test_annotation, os.path.join(config_c3d.asset_path, 'mica_test.txt'))

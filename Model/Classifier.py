@@ -6,7 +6,9 @@ import os
 import sys
 import array
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, classification_report
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, Normalizer
+from sklearn.manifold import TSNE
+from sklearn import pipeline
 import pickle
 class Classifier:
     def __init__(
@@ -48,10 +50,6 @@ class Classifier:
     def read_csv(self, filename, sep=','):
         with open(filename, 'rb') as csvfile:
             feature=np.array([float(w) for w in csvfile.read().split(sep) if w])
-            # for w in csvfile.read().split(sep):
-            #     print(repr(w))
-            #     if (w):
-            #         v = float(w)
             return feature
     def read_feature_file(self, filename):
         if(self.type_feature_file == "bin"):
@@ -64,17 +62,14 @@ class Classifier:
         return feature
 
     def get_list_feature_in_folder(self, path, layer):
-        
-        # listfiles = glob.glob(os.path.join(path, "*" + layer + "*"))
         listfiles = sorted([os.path.join(path, f) for f in os.listdir(path) if layer in f])
         return listfiles
 
     def combine_list_feature(self, list_feature):
+        if len(list_feature) == 0:
+            return np.zeros(20)
         features = [self.read_feature_file(csv_file) for csv_file in list_feature]
         feature = np.mean(features, axis=0)
-        print("[Combine] Folder: {}".format(os.path.dirname(list_feature[0])))
-        print("[Combine] List features shape: {}".format(np.array(features).shape))
-        print("[Combine] Feature combined shape: {}".format(np.array(feature).shape))
         return feature
 
     def load_feature_from_folder_and_average(self, split_file):
@@ -82,36 +77,29 @@ class Classifier:
         split_label = []
         try:
             for feature_folder, label in zip(split_file.name, split_file.label):
-                # print("[Info] Loading feature from: {}".format(os.path.basename(feature_folder)))
                 print("[Load] Loading: {} {}".format(feature_folder, label))
                 list_feature = self.get_list_feature_in_folder(feature_folder, self.layer)
                 if len(list_feature) == 0:
-                    # class_name = self.class_ind.convert_label_to_name(str(label + 1))
-                    # input_name = os.path.basename(feature_folder) + ".avi"
-                    # self.empty_folder.append(os.path.join(class_name, input_name))
                     self.empty_folder.append(feature_folder)
-                    continue
+                    # continue
                 self.test_name.append(feature_folder)
                 features = self.combine_list_feature(list_feature)
                 split_input.append(features)
                 split_label.append(label)
         except IOError as er:
             print("[Error] Error: {}".format(er))
-            
         return split_input, split_label
+
     def load_train_test_split(self):
-        print("[Info] Loading train test split {}".format(self.name))
+        print("[Classifier] Loading train test split {}".format(self.name))
         self.train_input, self.train_label = self.load_feature_from_folder_and_average(self.train_file)
         self.test_input, self.test_label = self.load_feature_from_folder_and_average(self.test_file)
-        print ("[Info] Loaded {} train feature".format(len(self.train_label)))
-        print ("[Info] Loaded {} test feature".format(len(self.test_label)))
+        print ("[Classifier] Loaded {} train feature".format(len(self.train_label)))
+        print ("[Classifier] Loaded {} test feature".format(len(self.test_label)))
+
     def transform_data(self):
         pass
-        # print("[Info] Transforming feature to range (0, 10)")
-        # scaler = MinMaxScaler(feature_range=(0, 10))
-        # scaler.fit(self.train_input)
-        # self.train_input = scaler.transform(self.train_input)
-        # self.test_input = scaler.transform(self.test_input)
+        
     def fuse_with(self, clf, fuse_func=None):
         """Fusion 2 classifier after load train_input
         fuse_func: take two input vector and produce output fusion vector
@@ -121,14 +109,14 @@ class Classifier:
         if fuse_func != None:
             self.train_input = [fuse_func(input1, input2) for input1, input2 in zip(self.train_input, clf.train_input)]
             self.test_input = [fuse_func(input1, input2) for input1, input2 in zip(self.test_input, clf.test_input)]
-        
 
     def training(self):
-        print("[Info] Training classifier {} ".format(self.name))
+        print("[Classifier] Training classifier {} ".format(self.name))
         self.classifier.fit(self.train_input, self.train_label)
+
     def testing(self):
-        print("[Info] Testing classifier {}".format(self.name))
-        self.test_pred = self.classifier.predict(self.test_input)
+        print("[Classifier] Testing classifier {}".format(self.name))
+        self.test_pred = self.predict(self.test_input)
         self.confusion_matrix = confusion_matrix(
             y_true=self.test_label,
             y_pred=self.test_pred, 
@@ -139,6 +127,48 @@ class Classifier:
         print (t)
         p = (set(self.test_pred))
         print (p)
+    
+    def gen_test_proba(self):
+        print("[Classifier] Generating prob {}".format(self.name))
+        self.train_input = self.predict_proba(self.train_input)
+        self.test_input = self.predict_proba(self.test_input)
+    def testing_proba(self):
+        print("[Classifier] Testing classifier using prob predict {}".format(self.name))
+        self.test_pred = [np.argmax(p) for p in self.test_input]
+        self.confusion_matrix = confusion_matrix(
+            y_true=self.test_label,
+            y_pred=self.test_pred, 
+            labels=range(len(self.class_ind.label))
+            )
+        print(' '.join(self.class_ind.label))
+        t = (set(self.test_label))
+        print (t)
+        p = (set(self.test_pred))
+        print (p)
+
+    def predict(self, x_test):
+        return self.classifier.predict(x_test)
+    def predict_proba(self, X):
+        return self.classifier.predict_proba(X)
+    def save_tsne(self, feature_input, input_label, filename):
+        feature_map = Normalizer()
+        tsne = TSNE(n_components=2)
+        mapping = pipeline.Pipeline([("feature_map", feature_map), ("tsne", tsne)])
+        tsne_feature = mapping.fit_transform(feature_input)
+        with open(filename, "w") as tt:
+            content = []
+            for item, label in zip(tsne_feature, input_label):
+                content.append("{} {} {}".format(label, item[0], item[1]))
+            tt.write('\n'.join(content))
+
+    def visualize_feature(self):
+        train_tsne = "train_tsne_{}.csv".format(self.name)
+        test_tsne = "test_tsne_{}.csv".format(self.name)
+        print("[Visualize] Processing train input")
+        self.save_tsne(self.train_input, self.train_label, train_tsne)
+        print("[Visualize] Processing test input")
+        self.save_tsne(self.test_input, self.test_label, test_tsne)
+        
     def save_classifier(self):
         pickle.dump(self.classifier, self.name + ".pkl")
     def save_output(self):

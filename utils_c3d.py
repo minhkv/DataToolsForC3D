@@ -1,5 +1,4 @@
 from __future__ import print_function
-from RemoteControl import *
 import sys
 import os
 import copy

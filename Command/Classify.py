@@ -28,7 +28,7 @@ class Classify(Command):
         self.classifier.testing()
         self.classifier.create_report()
         self.classifier.save_output()
-        if self.save:
-            print("[Classify] Saving classifier: {}".format(self.classifier.name))
-            self.classifier.save_classifier()
+        # if self.save:
+        #     print("[Classify] Saving classifier: {}".format(self.classifier.name))
+        #     self.classifier.save_classifier()
         return

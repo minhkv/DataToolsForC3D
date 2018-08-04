@@ -56,11 +56,6 @@ class MICASplitFile(SplitFile):
                 self.map_name_to_label = dict(zip(self.name, self.label))
         except IOError as ex:
             print("[Error] File Error: " + str(ex))
-    # def append_order_to_name(self):
-    #     new_name = []
-    #     for name, order in zip(self.name, self.segment_order):
-    #         new_name.append(os.path.join(name, str(order)))
-    #     self.name = new_name
     def concatenate(self, split_file):
         "Concatenate the name, label list of two UCFSplitFile"
         self.name.extend(split_file.name)
@@ -69,15 +64,28 @@ class MICASplitFile(SplitFile):
         self.start_in_video.extend(split_file.start_in_video)
         self.end_in_video.extend(split_file.end_in_video)
         self.segment_order.extend(split_file.segment_order)
+
     def count_frame(self):
-        for vid, start, end in zip(self.name, self.start_in_video, self.end_in_video):
-            num_fr = end - start + 1
-            self.num_frames.append(num_fr)
+        if self.use_image:
+            for vid in self.name:
+                
+                list_image = [im for im in os.listdir(vid)]
+                num_fr = len(list_image)
+                self.num_frames.append(num_fr)
+                print('[Count frame] {} {}'.format(vid, num_fr))
+        else:
+            for vid, start, end in zip(self.name, self.start_in_video, self.end_in_video):
+                print('[Count frame] {}'.format(vid))
+                num_fr = end - start + 1
+                self.num_frames.append(num_fr)
     def create_chunk_list(self):
         print("[Info] Create chunk list")
         start_frame = []
-        for start, end in zip(self.start_in_video, self.end_in_video):
-            start_frame.append(range(int(start), int(end) - self.clip_size, 4))
+        for start, end, num_frame in zip(self.start_in_video, self.end_in_video, self.num_frames):
+            start_f = start
+            if start == 0:
+                start_f = 1
+            start_frame.append(range(int(start_f), int(start_f) + num_frame - self.clip_size, self.clip_size))
         for i, name_item in enumerate(self.name):
             for num_frame in start_frame[i]:
                 self.chunk_list.append([name_item, num_frame, self.label[i]])

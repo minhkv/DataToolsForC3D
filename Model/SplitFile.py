@@ -51,6 +51,9 @@ class SplitFile:
         for i, name_item in enumerate(self.name):
             for num_frame in start_frame[i]:
                 self.chunk_list.append([name_item, num_frame, self.label[i]])
+    def replace(self, index):
+        """Replace the ith item"""
+        pass
         
     def write_chunk_list_to_file(self):
         print("[Info] Write to chunk_file: {}".format(self.chunk_list_file))

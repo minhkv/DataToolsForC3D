@@ -12,7 +12,8 @@ asset_path = os.path.abspath("Asset")
 temp = os.path.abspath("Asset/tmp")
 output_fine_tuned_net = os.path.abspath("Finetuned_net")
 # c3d_root = "/home/minhkv/C3D/C3D-v1.0/"
-c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
+# c3d_root = "/home/minhkv/script/Run_C3D/C3D/C3D-v1.0" # for png image
+c3d_mica_flow = "/home/minhkv/script/MICA_C3D/C3D_FLOW/C3D-v1.0" # for mica flow "color.avi_05d.jpg"
 
 input_chunk_list_line_syntax = "{0} {1} {2}\n"
 output_chunk_list_line_syntax = "{0}/{1:06d}\n"
